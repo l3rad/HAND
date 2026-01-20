@@ -132,25 +132,34 @@ const sortPattern = [
         this.document.getElementById(displayName).innerHTML = this.document.getElementById(displayName).innerHTML + innerString
     });
 
-    // loadDeckLists();
+    // fetchSavedStacks();
+    loadDeckLists();
     //Remove "hidden" attribute from main page
-    fetchSavedStacks(); //HERE
     showPage();
 
   });
 
 
 function createNewDeck() {
-    currentDeck = [];
+    // currentDeck = [];
     document.getElementById("mainCardDisplay").style = 'display: "";'
     const curDeckDisplay = document.getElementById("currentDeckDisplay");
     curDeckDisplay.getBoundingClientRect();
     curDeckDisplay.classList.add("show");
     updateDeckDisplay();
+    document.getElementById("buildButton").style = "display: none";
+    document.getElementById("saveButton").style = 'display: ""';
+    const loadedCardDisplay = document.getElementById("loadedCardDisplay")
+    if (!loadedCardDisplay.classList.contains("minimized")) {
+        loadedCardDisplay.classList.add("minimized");
+    }
+    
 }
 
 function addCard(name) {
+    console.log("Adding " + name);
     currentDeck.push(name);
+    checkDeckValidity();
     updateDeckDisplay();
 }
 
@@ -161,6 +170,7 @@ function removeCard(name) {
         currentDeck.splice(index, 1);
     }
     updateDeckDisplay();
+    checkDeckValidity();
 }
 
 function selectDeck(deckID) {
@@ -291,9 +301,6 @@ function updateBoard() {
             rotatedText = ' rotated'
         }
 
-
-        //EVERYTHING IS FLIPPED FOR SOME REASON!
-        console.log(card[2]);
         if (card[2] && getCardType(card[0]) == "hero") {
             flippedText = "backs/" + card[0] + ".png"
         } else if(card[2]) {
@@ -551,27 +558,42 @@ function showCurrentDeck(show) {
     }
 }
 
-function saveDeckLists(save) {
-    if (save == null) {
-        save == true;
+function checkDeckValidity() {
+    if (checkDeckList() == true) {
+        document.getElementById("saveButton").style = 'display: none;';
+        document.getElementById("saveStack").style = 'display: ""; background-color: rgb(34, 182, 145); color: black;';
     }
+    else {
+        document.getElementById("saveButton").style = 'display: "";';
+        document.getElementById("saveStack").style = 'display: none;';
+    }
+}
+
+function saveDeckLists(save = true) {
     if (checkDeckList() == true && save) {
         deckLists.push(currentDeck);
-    }
-    localStorage.setItem("DeckLists", JSON.stringify(deckLists));
-    if (save) {
+        localStorage.setItem("DeckLists", JSON.stringify(deckLists));
         currentDeck = [];
-        document.getElementById("mainCardDisplay").style = 'display: none;'
+    }
+    else if (checkDeckList(true) && save) {
+        currentDeck = [];
+    }
+    if (save) {
         updateDeckDisplay();
         loadDeckLists();
     }
+    document.getElementById("mainCardDisplay").style = 'display: none;'
     showCurrentDeck(false);
     document.getElementById("currentDeckDisplay").classList.remove("show");
     document.getElementById("currentDeckDisplay").classList.remove("minimized");
     document.getElementById("loadedCardDisplay").classList.remove("minimized");
+    document.getElementById("saveButton").style = "display: none;";
+    document.getElementById("saveStack").style = "display: none;";
+    document.getElementById("buildButton").style = 'display = ""';
+    
 }
 
-function checkDeckList() {
+function checkDeckList(ignoreDuplicates = false) {
     
     let sortedArray1 = []
     let sortedArray2 = []
@@ -579,27 +601,63 @@ function checkDeckList() {
     if (currentDeck.length != 9) {
         return false;
     }
-        if (deckLists.length == 0) {
-            return true;
-        }
-        let counter = 0;
-        deckLists.forEach(deckList => {
-            sortedArray1 = deckList.sort()
-            sortedArray2 = currentDeck.sort()
-            for (let i = 0; i < sortedArray1.length; i++) {
-                if (sortedArray1[i] == sortedArray2[i]) {
-                    counter++;
-                }
-                else {
-                    if (counter == 9) {
-                        return false
-                    }
-                    counter = 0;
-                }
-            }
-        })
+    if (deckLists.length == 0) {
         return true;
+    }
+    let counter = 0;
+
+    let heroCards = 0;
+    let heartCards = 0;
+    let itemCards = 0;
+    let trapCards = 0;
+    let landCards = 0;
+
+    currentDeck.forEach(card => {
+        switch (getCardType(card)) {
+            case "hero":
+            heroCards++;
+            break;
+            case "heart":
+            heartCards++;
+            break;
+            case "item":
+            itemCards++;
+            break;
+            case "trap":
+            trapCards++;
+            break;
+            case "land":
+            landCards++;
+            break;                                
+        }
+    })
     
+    if (heroCards != 1 || heartCards != 1 || itemCards != 3 || trapCards != 2 || landCards != 2) {
+        return false;
+    }
+
+    // if (heroCards == 1) {
+    //     document.getElementById("heroTitle").classList.add("validated");
+    // }
+
+    deckLists.forEach(deckList => {
+
+        sortedArray1 = deckList.sort()
+        sortedArray2 = currentDeck.sort()
+        for (let i = 0; i < sortedArray1.length; i++) {
+            if (sortedArray1[i] == sortedArray2[i]) {
+                counter++;
+            }
+            else {
+                if (counter == 9) {
+                    return ignoreDuplicates;
+                }
+                counter = 0;
+            }
+        }
+    })
+
+    return true;
 }
 
 function getRank(cardName) {
@@ -616,6 +674,8 @@ function getRank(cardName) {
 
 function fetchSavedStacks() {
     let myJson = localStorage.getItem("DeckLists");
+    console.log("Fetching myJson!")
+    console.log(myJson);
     if (myJson == "undefined")
     {
         console.log("No saved decks found");
@@ -629,10 +689,10 @@ function minimizeLoadedStacks() {
     const loadedStackDisplay = document.getElementById("loadedCardDisplay")
     loadedStackDisplay.classList.toggle("minimized");
     if (loadedStackDisplay.classList.contains("minimized")) {
-        loadedDeckTitle.innerHTML = "- Current Stacks -";
+        loadedDeckTitle.innerHTML = "- Saved Stacks -";
     }
     else {
-        loadedDeckTitle.innerHTML = "v Current Stacks v";
+        loadedDeckTitle.innerHTML = "v Saved Stacks v";
     }
     //WORKING ON THIS SO YOU CAN MINIMIZE THE CURRENT STACKS SECTION
 }
@@ -640,8 +700,13 @@ function minimizeLoadedStacks() {
 //Gemini Solution
 function loadDeckLists() {
     fetchSavedStacks();
-
+    
     const deckDisplayHTML = document.getElementById("loadedCardDisplay");
+
+    if (deckLists.length == 0) {
+        deckDisplayHTML.style = "display: none;"
+    }
+
 
     // 1. Handle the "Hidden" logic for the Title
     let hiddenClass = "";
@@ -651,7 +716,7 @@ function loadDeckLists() {
     
     // 2. Start building the HTML String
     // We add the Title first
-    let finalHTML = '<div id="loadedDeckTitle" class="' + hiddenClass + '" onclick="minimizeLoadedStacks()">v Current Stacks v</div>';
+    let finalHTML = '<div id="loadedDeckTitle" class="' + hiddenClass + '" onclick="minimizeLoadedStacks()">v Saved Stacks v</div>';
     
     // 3. Open the Wrapper Div (This prevents the animation bugs)
     finalHTML += '<div id="loadedCardWrapper">';
@@ -711,75 +776,122 @@ function loadDeckLists() {
     }
 }
 
-function loadDeckLists2() {
+// function loadDeckLists2() {
 
-    fetchSavedStacks()
+//     fetchSavedStacks()
 
-    const deckDisplayHTML = document.getElementById("loadedCardDisplay");
+//     const deckDisplayHTML = document.getElementById("loadedCardDisplay");
 
-    // if (!deckDisplayHTML.classList.contains("hidden")) {
-    //     deckDisplayHTML.classList.toggle("hidden");
-    //     return;
-    // }
+//     // if (!deckDisplayHTML.classList.contains("hidden")) {
+//     //     deckDisplayHTML.classList.toggle("hidden");
+//     //     return;
+//     // }
 
-    let hidden = "";
+//     let hidden = "";
 
-    if (!deckDisplayHTML.classList.contains("hidden")) {
-        hidden="hidden";
-    }
+//     if (!deckDisplayHTML.classList.contains("hidden")) {
+//         hidden="hidden";
+//     }
 
-    deckDisplayHTML.innerHTML = '<div id="loadedDeckTitle" class="' + hidden + '" onclick="minimizeLoadedStacks()">v Current Stacks v</div>';
-    let deckCount = -1;
+//     deckDisplayHTML.innerHTML = '<div id="loadedDeckTitle" class="' + hidden + '" onclick="minimizeLoadedStacks()">v Current Stacks v</div>';
+//     let deckCount = -1;
 
-    if (deckLists.length > 0) {
-        document.getElementById("loadedDeckTitle").classList.toggle(hidden);
-    }
-    deckLists.forEach(deckList => {
-        deckList.sort((a,b) => {
-            return getRank(a) - getRank(b);
-        })
-        deckCount++;
-        deckDisplayHTML.innerHTML = deckDisplayHTML.innerHTML + '<div id="loadedDeck' + deckCount + '"></div><button onclick="editDeck(' + deckCount + ')">Edit</button><button onclick="deleteDeck(' + deckCount + ',true)">Delete</button>'
+//     if (deckLists.length > 0) {
+//         document.getElementById("loadedDeckTitle").classList.toggle(hidden);
+//     }
+//     deckLists.forEach(deckList => {
+//         deckList.sort((a,b) => {
+//             return getRank(a) - getRank(b);
+//         })
+//         deckCount++;
+//         deckDisplayHTML.innerHTML = deckDisplayHTML.innerHTML + '<div id="loadedDeck' + deckCount + '"></div><button onclick="editDeck(' + deckCount + ')">Edit</button><button onclick="deleteDeck(' + deckCount + ',true)">Delete</button>'
 
-        const imageHTML = document.getElementById("loadedDeck" + deckCount);
+//         const imageHTML = document.getElementById("loadedDeck" + deckCount);
 
-            deckList.forEach(card => {
-            imageHTML.innerHTML = imageHTML.innerHTML + '<img class="loadedCard" src="./Pictures/fronts/' + card + '.png" alt="">'
-            if (heroNames.includes(card)) {
-                imageHTML.innerHTML = imageHTML.innerHTML + '<img class="loadedCard" src="./Pictures/backs/' + card + '.png" alt="">'
-            }
-            })
-        })
+//             deckList.forEach(card => {
+//             imageHTML.innerHTML = imageHTML.innerHTML + '<img class="loadedCard" src="./Pictures/fronts/' + card + '.png" alt="">'
+//             if (heroNames.includes(card)) {
+//                 imageHTML.innerHTML = imageHTML.innerHTML + '<img class="loadedCard" src="./Pictures/backs/' + card + '.png" alt="">'
+//             }
+//             })
+//         })
 
         
-        // deckDisplayHTML.innerHTML = '<div id="loadedStacksContainer">' + deckDisplayHTML.innerHTML + '</div>'
+//         // deckDisplayHTML.innerHTML = '<div id="loadedStacksContainer">' + deckDisplayHTML.innerHTML + '</div>'
 
-    for (let i = 0; i <= deckCount; i++) {
-            document.getElementById("loadedDeck" + i).addEventListener('click',() => {
-            selectDeck("loadedDeck" + i);
-        })
-    }
-}
+//     for (let i = 0; i <= deckCount; i++) {
+//             document.getElementById("loadedDeck" + i).addEventListener('click',() => {
+//             selectDeck("loadedDeck" + i);
+//         })
+//     }
+// }
+
+// function editDeck(deckNumber) {
+//     // let deleteDeck = "";
+//     if (currentDeck.length != 0) {
+//         if(confirm("WARNING - This will delete the stack you are currently building. Would you like to proceed?")) {
+//             console.log("OK to delete deck!")
+//         }
+//         else {
+//             return;
+//         }
+//     }
+//     createNewDeck();
+//     let tmpDeck = currentDeck;
+//     currentDeck = deckLists[deckNumber];
+//     deleteDeck(deckNumber, false);
+//     updateDeckDisplay();
+//     showCurrentDeck(true);
+//     minimizeLoadedStacks();
+//     checkDeckValidity();
+//     if (deckLists.length == 0) {
+//         document.getElementById("loadedCardDisplay").classList.add("minimized");
+//     }
+// }
+
+// function deleteDeck(deckNumber, save = true) {
+//     console.log("Deleting Deck!");
+//     deckLists.splice(deckNumber,1);
+//     if (save) {
+//         localStorage.setItem("Decklists", JSON.stringify(deckLists));
+//     }
+//     saveDeckLists(save);
+//     loadDeckLists();
+// }
 
 function editDeck(deckNumber) {
-    createNewDeck();
-    currentDeck = deckLists[deckNumber];
-    deleteDeck(deckNumber, false);
+    // 1. Check if the current workspace is occupied
+    if (currentDeck.length != 0) {
+        // Ask ONCE. If they click Cancel/No, we stop immediately.
+        if (!confirm("WARNING - This will delete the stack you are currently building. Would you like to proceed?")) {
+            return;
+        }
+    }
+
+    // 2. Prepare the UI/Variables
+    // (Assuming createNewDeck clears the board, we do this after the confirm)
+    createNewDeck(); 
+
+    // 3. Capture the deck you want to edit BEFORE deleting it from the list
+    // We create a reference to it so we don't lose it when we splice the array
+    let deckToLoad = deckLists[deckNumber];
+
+    // 4. Delete the deck from the saved list
+    // We pass 'false' for save (per your original code) and 'true' to SKIP confirmations
+    deleteDeck(deckNumber, false, true); 
+
+    // 5. Set the current deck to the one we just pulled
+    currentDeck = deckToLoad;
+
+    // 6. Update UI
     updateDeckDisplay();
     showCurrentDeck(true);
     minimizeLoadedStacks();
-}
-
-function deleteDeck(deckNumber, save) {
-    if (save == null) {
-        save = true;
-    }
-
-    let myDecks = deckLists
-    myDecks.splice(deckNumber,1);
-    deckLists = myDecks;
-    saveDeckLists(save);
-    loadDeckLists();
+    checkDeckValidity();
+    
+    // if (deckLists.length == 0) {
+        document.getElementById("loadedCardDisplay").classList.add("minimized");
+    // }
 }
 
 function showPage() {
@@ -914,3 +1026,247 @@ document.getElementById("leftArrowContainer")
 
 document.getElementById("rightArrowContainer")
     .addEventListener("mouseleave", stopScroll);
+
+    //AI LOGIC FOR DELETE, SAVE, AND EDIT
+
+    // ==========================================
+// 1. DATA HELPERS (Internal Use Only)
+// ==========================================
+
+function writeToStorage() {
+    localStorage.setItem("DeckLists", JSON.stringify(deckLists));
+}
+
+function readFromStorage() {
+    let myJson = localStorage.getItem("DeckLists");
+    console.log(myJson);
+    if (!myJson || myJson === "undefined") {
+        deckLists = [];
+    } else {
+        deckLists = JSON.parse(myJson);
+    }
+}
+
+// ==========================================
+// 2. UI HELPERS (Internal Use Only)
+// ==========================================
+
+function renderSavedStacksSidebar() {
+    const deckDisplayHTML = document.getElementById("loadedCardDisplay");
+    console.log("here!")
+    console.log(deckLists);
+    if (deckLists.length == 0) {
+        deckDisplayHTML.style = "display: none;"
+        return;
+    }
+    else {
+        deckDisplayHTML.style = 'display: ""'
+    }
+    
+    // Handle the "v Saved Stacks v" Title visibility
+    let hiddenClass = "";
+    if (!deckDisplayHTML.classList.contains("hidden")) {
+        hiddenClass = "hidden";
+    }
+
+    let finalHTML = '<div id="loadedDeckTitle" class="' + hiddenClass + '" onclick="minimizeLoadedStacks()">v Saved Stacks v</div>';
+    finalHTML += '<div id="loadedCardWrapper">';
+
+    // Build the list of decks
+    deckLists.forEach((deckList, index) => {
+        // Sort for display
+        deckList.sort((a, b) => {
+            return getRank(a) - getRank(b);
+        });
+
+        // Add the buttons, pointing to the MAIN functions
+        finalHTML += `
+            <div id="loadedDeck${index}"></div>
+            <button onclick="editDeck(${index})">Edit</button>
+            <button onclick="deleteDeck(${index})">Delete</button>
+        `;
+    });
+
+    finalHTML += '</div>';
+    deckDisplayHTML.innerHTML = finalHTML;
+
+    // Inject Images and add Click Listeners
+    deckLists.forEach((deckList, index) => {
+        const imageHTML = document.getElementById("loadedDeck" + index);
+        let imagesString = ""; 
+        
+        deckList.forEach(card => {
+            imagesString += '<img class="loadedCard" src="./Pictures/fronts/' + card + '.png" alt="">';
+            if (heroNames.includes(card)) {
+                imagesString += '<img class="loadedCard" src="./Pictures/backs/' + card + '.png" alt="">';
+            }
+        });
+        
+        imageHTML.innerHTML = imagesString;
+        imageHTML.addEventListener('click', () => {
+            selectDeck("loadedDeck" + index);
+        });
+    });
+
+    // Finalize Title Toggle
+    if (deckLists.length > 0) {
+        const titleEl = document.getElementById("loadedDeckTitle");
+        if(titleEl) titleEl.classList.toggle(hiddenClass); 
+    }
+}
+
+// function clearBuilderInterface() {
+//     // Hide the builder area
+//     document.getElementById("mainCardDisplay").style = 'display: none;';
+    
+//     // Hide the current deck lists
+//     showCurrentDeck(false);
+//     const curDeckDisp = document.getElementById("currentDeckDisplay");
+//     curDeckDisp.classList.remove("show");
+//     curDeckDisp.classList.remove("minimized");
+    
+//     // Reset buttons
+//     document.getElementById("loadedCardDisplay").classList.remove("minimized");
+//     document.getElementById("saveButton").style = "display: none;";
+//     document.getElementById("saveStack").style = "display: none;";
+//     document.getElementById("buildButton").style = ""; 
+    
+//     // Wipe the variable
+//     currentDeck = [];
+// }
+
+
+function clearBuilderInterface() {
+    // Hide the builder area
+    document.getElementById("mainCardDisplay").style = 'display: none;';
+    
+    // Hide the current deck lists
+    showCurrentDeck(false);
+    const curDeckDisp = document.getElementById("currentDeckDisplay");
+    curDeckDisp.classList.remove("show");
+    curDeckDisp.classList.remove("minimized");
+    
+    // Reset buttons
+    document.getElementById("loadedCardDisplay").classList.remove("minimized");
+    document.getElementById("saveButton").style = "display: none;";
+    document.getElementById("saveStack").style = "display: none;";
+    document.getElementById("buildButton").style = ""; 
+    
+    // NOTE: We do NOT clear currentDeck = [] here anymore. 
+    // We let the save function decide if the data should be wiped.
+}
+
+// ==========================================
+// 3. MAIN ACTIONS (Called by HTML)
+// ==========================================
+
+let editing = false
+
+function loadDeckLists() {
+    readFromStorage();          
+    renderSavedStacksSidebar(); 
+}
+
+// function deleteDeck(deckNumber, save = true) {
+//     if (currentDeck.length > 0) {
+//         if (!confirm("Editing this deck will delete the current stack, continue?")) return;
+//     } 
+//     if (!editing) {
+//         if (!confirm("Are you sure you want to delete this deck?")) return;
+//     }
+
+//     console.log("Deleting Deck " + deckNumber);
+
+//     // 1. Modify Data
+//     deckLists.splice(deckNumber, 1);
+
+//     // 2. Save Data (Only if save is true, though usually we always want this)
+//     if (save) {
+//         writeToStorage();
+//     }
+
+//     // 3. Update UI
+//     renderSavedStacksSidebar();
+// }
+
+// function saveDeckLists(save = true) {
+//     // 1. Validate
+//     // (Assuming checkDeckList returns true if valid, false if not)
+//     if (checkDeckList() !== true) {
+//         console.log("Cannot save: Deck invalid or duplicate.");
+//         return; 
+//     }
+
+//     if (save) {
+//         // 2. Modify Data
+//         deckLists.push(currentDeck);
+
+//         // 3. Save Data
+//         writeToStorage();
+
+//         // 4. Update UI
+//         renderSavedStacksSidebar();
+        
+//         // 5. Clean up
+//         clearBuilderInterface();
+//     } else {
+//         // If save is false, we just clear the interface without writing to DB
+//         clearBuilderInterface();
+//     }
+// }
+
+// Added 'skipConfirm' parameter (defaults to false so standard delete buttons still ask)
+function deleteDeck(deckNumber, save = true, skipConfirm = false) {
+    
+    // Only ask for confirmation if skipConfirm is FALSE
+    if (!skipConfirm) {
+        if (currentDeck.length > 0) {
+            if (!confirm("Editing this deck will delete the current stack, continue?")) return;
+        } 
+        if (!editing) {
+            if (!confirm("Are you sure you want to delete this deck?")) return;
+        }
+    }
+
+    console.log("Deleting Deck " + deckNumber);
+
+    // 1. Modify Data
+    deckLists.splice(deckNumber, 1);
+
+    // 2. Save Data
+    if (save) {
+        writeToStorage();
+    }
+
+    // 3. Update UI
+    renderSavedStacksSidebar();
+}
+
+function saveDeckLists(save = true) {
+    if (save) {
+        // 1. Check if Valid and Unique
+        if (checkDeckList() === true) {
+            console.log("Deck Valid. Saving...");
+            deckLists.push(currentDeck);
+            writeToStorage();
+            renderSavedStacksSidebar();
+            
+            // Success! We can wipe the board now.
+            currentDeck = []; 
+        } 
+        // 2. Check if Valid but Duplicate
+        else if (checkDeckList(true) === true) {
+            console.log("Duplicate deck. Not saving, but clearing board.");
+            // We treat this as "done", so we wipe the board.
+            currentDeck = []; 
+        }
+        // 3. Invalid (Wrong number of cards, etc.)
+        else {
+            console.log("Deck Invalid. Hiding screen, but keeping current draft.");
+            // We do NOT wipe currentDeck, so the user can fix it later.
+        }
+    }
+
+    // 4. ALWAYS hide the interface, regardless of what happened above
+    clearBuilderInterface();
+}

@@ -1,35 +1,37 @@
 <!DOCTYPE html>
+<title>HAND Playtest Site</title>
+<link rel="icon" type="image/x-icon" href="./Pictures/HANDLogo.png">
 <!-- <button onclick="testButtonFunction()"></button>> -->
 <div>
     <div id="wholePage" style="display:none;">
         <div id="logoImage">
             <img src="./Pictures/HANDLogo.png" />
         </div>
+        <div id="logoImageMini">
+            <img src="./Pictures/HANDLogo.png" />
+        </div>
 
         <div id="gameModeBackground"></div>
 
-        <!-- <div id="userEntry">
-            <input id="deckPaste" />
-        </div> -->
         <div id="mainButtons">
-            <button class="mainButton" title="Build a new Stack" onclick="createNewDeck()">Build</button>
-            <button class="mainButton" title="Save stack being built" onclick="saveDeckLists(true)">Save</button>
-            <button class="mainButton" title="Load saved stacks" onclick="loadDeckLists()">Load</button>
+            <button class="mainButton" id="buildButton" title="Build a new Stack"
+                onclick="createNewDeck()">Build</button>
+            <button class="mainButton" id="saveButton" style="display: none;" title="Save stack being built"
+                onclick="saveDeckLists(false)">Save Builder</button>
+            <button class="mainButton" id="saveStack" style="display: none;" title="Save stack being built"
+                onclick="saveDeckLists(true)">Save Stack!</button>
         </div>
         <div id="playButtonDiv">
-            <button id="playButton" onclick="launchGame()">PLAY</button>
+            <button id="playButton" title="Select 2 Saved Stacks to play!" onclick="launchGame()">PLAY</button>
         </div>
         <div>
             <div id="loadedCardDisplay"><!-- anything here will be cleared and replaced--></div>
         </div>
-        <!-- <div id="mainCardDisplayTitles">
-            <div>Select a Hero</div>
-            <div>Select a Heart</div>
-            <div>Select 3 Items</div>
-            <div>Select 2 Traps</div>
-            <div>Select 2 Lands</div>
-        </div> -->
+
         <div id="mainCardDisplay" style="display:none;">
+            <div id="deckBuilderText">Click on a card to add it to your stack! Click on a card in your stack to remove
+                it.
+            </div>
             <div id="mainCardDisplayContainer" class="minimized">
                 <div id="heroDisplay">
                 </div>
@@ -47,16 +49,8 @@
         <div id="currentDeckDisplay">
             <div id="deckDisplayButtonDiv">
                 <button id="deckDisplayButton" onClick="hideCurrentDeckDisplay()">Hide</button>
-                <!-- <div id="cardCounter">
-                    Heroes
-                <div id="heroCounter">0/2</div>
-                </div> -->
             </div>
         </div>
-
-        <!-- <div class="gameButtonDiv">
-        <button class="gameButton" onclick="playGame()">Play Game</button>
-    </div> -->
     </div>
     <div id="gameScreen" style="display: none;">
 
@@ -93,6 +87,7 @@
         overflow-x: hidden;
         color: white;
         scrollbar-gutter: stable;
+        /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
     }
 
     button {
@@ -112,7 +107,13 @@
     }
 
     .selected {
-        background-color: green !important;
+        background-color: rgb(34, 182, 145) !important;
+        border: 1px dashed white;
+        margin-right: -6px !important;
+        margin-left: -6px !important;
+        margin-top: -1px;
+        margin-bottom: -1px;
+        border-radius: 10px;
     }
 
     .rotated {
@@ -142,6 +143,15 @@
         left: 35vw;
         bottom: 50px;
         z-index: -1;
+        display: none;
+    }
+
+    #logoImageMini img {
+        width: 14vw;
+        position: fixed;
+        right: 2vw;
+        top: 2vh;
+        z-index: -1;
     }
 
     /* Main Menu Buttons */
@@ -155,17 +165,24 @@
         flex-wrap: wrap;
         justify-content: space-around;
         position: fixed;
+        z-index: 100;
     }
 
     .mainButton {
-        height: 50px;
-        width: 100px;
+        /* width: 500px; */
+        font-size: 72px;
         margin-bottom: 20px;
+        transition: transform 0.25s ease;
+
+    }
+
+    .mainButton:hover {
+        transform: scale(1.25);
     }
 
     /* Play Button Area */
     #playButtonDiv {
-        position: fixed;
+        position: absolute;
         top: 15vh;
         width: 40vw;
         left: 30vw;
@@ -175,9 +192,22 @@
     }
 
     #playButton {
+        transition: transform 0.25s ease;
         font-size: 72px;
+        width: 200px;
         margin-top: 10px;
-        position: fixed;
+        position: absolute;
+    }
+
+    /* 
+    #playButton:disabled {
+        background-color: grey;
+        color: lightgrey;
+        transition: none;
+    } */
+
+    #playButton:hover {
+        transform: scale(1.25);
     }
 
     /* Loaded Deck Display */
@@ -188,6 +218,17 @@
         margin-top: 8px;
         font-weight: bold;
         font-size: 24px;
+        background-color: black;
+        transition-property: background-color, transform, color;
+        transition-duration: 0.5s;
+    }
+
+    #loadedDeckTitle:hover {
+        transform: scale(1.25);
+        background-color: rgb(34, 182, 145);
+        color: black;
+        /* font-weight: bolder; */
+        cursor: pointer;
     }
 
     /* #loadedCardDisplay {
@@ -206,7 +247,12 @@
         width: 5vw;
     }*/
 
-
+    /* #loadedCardDisplay>*:not(:first-child) {
+        transition-property: display, height;
+        transition-delay: 0.5s, 0;
+        transition-duration: 0, 0.5s;
+        display: flex;
+    } */
 
     #loadedCardDisplay.minimized *:not(:first-child) {
         display: none !important;
@@ -216,14 +262,16 @@
     #loadedCardDisplay {
         margin-top: 30vh;
         z-index: -1;
-        background-color: rgba(0, 0, 0, .5);
+        /* background-color: rgba(0, 0, 0, .5); */
 
         /* Animation settings */
-        transition: width 0.5s ease;
+        transition-property: width, margin-top;
+        transition-duration: 0.25s, 0.5s;
+        /* transition-delay: 0.25s, 0s; */
+        transition-timing-function: ease-in-out;
         width: 100%;
-        /* Start width */
         overflow: hidden;
-        /* Essential for the curtain effect */
+
     }
 
     /* THE CONTENT (Handles layout) */
@@ -239,10 +287,24 @@
         /* Optional spacing */
     }
 
+    #loadedCardWrapper>div {
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-right: 5px;
+        padding-left: 5px;
+        margin-right: -5px;
+        margin-left: -5px;
+    }
+
     /* The Minimized State */
     #loadedCardDisplay.minimized {
-        width: 11vw;
+        width: 14vw;
         height: 7vh;
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        margin-top: 0;
+        border-radius: 10px;
     }
 
     #loadedCardDisplay>* {
@@ -270,7 +332,8 @@
         flex-wrap: wrap;
         justify-content: space-around;
         width: 100%;
-        margin-top: 5vh;
+        margin-top: 30vh;
+        margin-bottom: 50vh;
         z-index: -1;
     }
 
@@ -286,6 +349,15 @@
     #mainCardDisplayContainer * * {
         width: 50%;
         cursor: pointer;
+    }
+
+    #deckBuilderText {
+        display: flex;
+        width: 100vw;
+        justify-content: space-around;
+        position: absolute;
+        top: 27vh;
+        color: rgb(34, 182, 145);
     }
 
     #heroDisplay {
@@ -324,6 +396,10 @@
     #currentDeckDisplay>* {
         height: 25vh;
         cursor: pointer;
+    }
+
+    .validated {
+        color: rgb(34, 182, 145) !important;
     }
 
     #counterHelper {
