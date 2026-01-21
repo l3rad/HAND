@@ -22,7 +22,8 @@
                 onclick="saveDeckLists(true)">Save Stack!</button>
         </div>
         <div id="playButtonDiv">
-            <button id="playButton" title="Select 2 Saved Stacks to play!" onclick="launchGame()">PLAY</button>
+            <button id="playButton" class="playButtonNotReady" title="Select 2 Saved Stacks to play!"
+                onclick="launchGame()">PLAY</button>
         </div>
         <div>
             <div id="loadedCardDisplay"><!-- anything here will be cleared and replaced--></div>
@@ -192,19 +193,69 @@
     }
 
     #playButton {
-        transition: transform 0.25s ease;
-        font-size: 72px;
+        /* 1. LAYOUT */
         width: 200px;
+        font-size: 72px;
         margin-top: 10px;
         position: absolute;
+        border-radius: 5px;
+
+        /* 2. THE FILL SYSTEM */
+        /* The "Empty" color underneath */
+        background-color: grey;
+
+        /* The "Full" color (Green) essentially painted as an image on top */
+        /* We use linear-gradient simply to create a solid block of color */
+        background-image: linear-gradient(rgb(34, 182, 145), rgb(34, 182, 145));
+
+        /* Stop the green from repeating so we can control its size */
+        background-repeat: no-repeat;
+
+        /* 3. ANIMATION SETTINGS */
+        /* We animate background-size (the fill) and transform (the hover scale) */
+        transition: background-size 0.25s ease, transform 0.25s ease;
+        /* transform: scale(0.9); */
     }
 
-    /* 
-    #playButton:disabled {
-        background-color: grey;
-        color: lightgrey;
-        transition: none;
-    } */
+    /* STATE 1: NOT READY (0% Filled) */
+    .playButtonNotReady {
+        /* Width is 0, Height is 100% */
+        background-size: 0% 100%;
+        color: white;
+        cursor: auto;
+        transform: scale(0.75) !important;
+    }
+
+    /* STATE 2: HALF READY (50% Filled) */
+    .playButtonHalfReady {
+        /* Width is 50% */
+        background-size: 50% 100%;
+        color: white;
+        /* User requested change to black text here */
+        cursor: auto;
+        transform: scale(0.75) !important;
+    }
+
+    /* STATE 3: READY (100% Filled) */
+    .playButtonReady {
+        /* Width is 100% */
+        background-size: 100% 100%;
+        color: black;
+        font-weight: bolder;
+        cursor: pointer;
+        transform: scale(1);
+    }
+
+    /* HOVER EFFECTS */
+    /* We keep these separate to ensure they don't conflict with the fill state */
+    .playButtonNotReady:hover,
+    .playButtonHalfReady:hover {
+        transform: scale(0.75) !important;
+    }
+
+    .playButtonReady:hover {
+        transform: scale(1.75);
+    }
 
     #playButton:hover {
         transform: scale(1.25);

@@ -190,12 +190,26 @@ function selectDeck(deckID) {
         selectedStacks.push(deckID)
         document.getElementById(deckID).classList.toggle("selected")
     }
+    validatePlayButton();
+}
+
+function validatePlayButton() {
+    const playbtn = document.getElementById("playButton");
+    if (selectedStacks.length == 0) {
+        playbtn.classList = "playButtonNotReady";
+    }
+    else if (selectedStacks.length == 1) {
+        playbtn.classList = "playButtonHalfReady";
+    }
+    else if (selectedStacks.length == 2) {
+        playbtn.classList = "playButtonReady";
+    }
 }
 
 function launchGame() {
     //select 2 stacks - make stacks selectable
     if (selectedStacks.length != 2) {
-        alert("You must have 2 stacks selected!");
+        alert("You must have 2 saved stacks selected to play!\n\nTo build a stack, click build and add cards until you meet the requirements (the Save button will turn green)\n\nTo select a stack, have the Saved Stacks pop up open and click on 2 different stacks.");
         return;
     }
     
@@ -483,12 +497,34 @@ function getDeckDisplayCountersHTML() {
 
     })
 
+    let heroValid = " ";
+    let heartValid = "";
+    let itemValid = "";
+    let trapValid = "";
+    let landValid = "";
+
+    if (heroCount == 1) {
+        heroValid = " validated";
+    }
+        if (heartCount == 1) {
+        heartValid = " validated";
+    }
+        if (itemCount == 3) {
+        itemValid = " validated";
+    }
+        if (trapCount == 2) {
+        trapValid = " validated";
+    }
+        if (landCount == 2) {
+        landValid = " validated";
+    }
+
     htmlString += '<div id="cardCounter">'
-    htmlString += '<div>Hero</div><div class="counter">' + heroCount + '/1</div>'
-    htmlString += '<div>Heart</div><div class="counter">' + heartCount + '/1</div>'
-    htmlString += '<div>Items</div><div class="counter">' + itemCount + '/3</div>'
-    htmlString += '<div>Traps</div><div class="counter">' + trapCount + '/2</div>'
-    htmlString += '<div>Lands</div><div class="counter">' + landCount + '/2</div>'
+    htmlString += '<div class="' + heroValid + '">Hero</div><div class="counter' + heroValid + '">' + heroCount + '/1</div>'
+    htmlString += '<div class="' + heartValid + '">Heart</div><div class="counter' + heartValid + '">' + heartCount + '/1</div>'
+    htmlString += '<div class="' + itemValid + '">Items</div><div class="counter' + itemValid + '">' + itemCount + '/3</div>'
+    htmlString += '<div class="' + trapValid + '">Traps</div><div class="counter' + trapValid + '">' + trapCount + '/2</div>'
+    htmlString += '<div class="' + landValid + '">Lands</div><div class="counter' + landValid + '">' + landCount + '/2</div>'
     htmlString += '</div>';
     return htmlString;
 }
@@ -497,7 +533,12 @@ function updateDeckDisplay() {
 
     let displayCounter = getDeckDisplayCountersHTML()
 
-    this.document.getElementById("currentDeckDisplay").innerHTML = '<div id="counterHelper"><button id="deckDisplayButton" onclick="hideCurrentDeckDisplay()">Hide</button>' + displayCounter + "</div>";
+    const currentDeckDisplay = this.document.getElementById("currentDeckDisplay");
+    let curDeckShowHide = "Hide"
+    if (document.getElementById("deckDisplayButton").innerHTML == "Show"){
+        curDeckShowHide = "Show"
+    }
+    currentDeckDisplay.innerHTML = '<div id="counterHelper"><button id="deckDisplayButton" onclick="hideCurrentDeckDisplay()">' + curDeckShowHide + '</button>' + displayCounter + "</div>";
 
     if (currentDeck.length == 0) {
         return;
@@ -533,7 +574,7 @@ function updateDeckDisplay() {
         if (heroNames.includes(card)) {
             updatedHTML += '<img src="./Pictures/backs/' + card + '.png" alt="" onclick="removeCard(\'' + card + '\')">'
         }
-        this.document.getElementById("currentDeckDisplay").innerHTML = this.document.getElementById("currentDeckDisplay").innerHTML + updatedHTML
+        currentDeckDisplay.innerHTML += updatedHTML;
     });
 }
 
