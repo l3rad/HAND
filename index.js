@@ -1,5 +1,6 @@
-// #region Variable Declarations
-//setting up database
+// =========================================
+// DATA: card catalogs + runtime state
+// =========================================
 const heroNames = [
     "Hero",
     "Lucy",
@@ -39,11 +40,8 @@ const landNames = [
 
 const priorityOrder = [heroNames, heartNames, itemNames, trapNames, landNames]
 
-// not sure this is used
-let allCards = [];
-
 // All saved decklists
-let deckLists= [];
+let deckLists = [];
 
 // The current deck being edited or created
 let currentDeck = [];
@@ -79,6 +77,7 @@ let currentHand = {
 
 let highlightedCard = -1;
 
+// Play-order template for dealing cards onto the board.
 const sortPattern = [
   "hero",
   "item",
@@ -100,15 +99,13 @@ const sortPattern = [
   "hero"
 ];
 
-// #endregion
+// =========================================
+// INIT: build picker UI + load saved decks
+// =========================================
+window.addEventListener('load', function() {
+    const allCardNames = heroNames.concat(heartNames, itemNames, trapNames, landNames);
 
-
-// Wait for the entire page to load
-  window.addEventListener('load', function() {
-
-    this.deckLists = heroNames.concat(heartNames, itemNames, trapNames, landNames);
-
-    this.deckLists.forEach(card => {
+    allCardNames.forEach(card => {
         let displayName = ""
         let innerString = '<img src="./Pictures/fronts/'+ card + '.png" alt="" onclick="addCard(\'' + card + '\')"></img>'
 
@@ -132,14 +129,19 @@ const sortPattern = [
         this.document.getElementById(displayName).innerHTML = this.document.getElementById(displayName).innerHTML + innerString
     });
 
-    // fetchSavedStacks();
     loadDeckLists();
     //Remove "hidden" attribute from main page
     showPage();
 
-  });
+});
 
+function showPage() {
+    this.document.getElementById("wholePage").style = 'display: "";'
+}
 
+// =========================================
+// BUILDER: create/edit current deck
+// =========================================
 function createNewDeck() {
     // currentDeck = [];
     document.getElementById("mainCardDisplay").style = 'display: "";'
@@ -147,6 +149,7 @@ function createNewDeck() {
     curDeckDisplay.getBoundingClientRect();
     curDeckDisplay.classList.add("show");
     updateDeckDisplay();
+    updateCardTypeGreyOut();
     document.getElementById("buildButton").style = "display: none";
     document.getElementById("saveButton").style = 'display: ""';
     const loadedCardDisplay = document.getElementById("loadedCardDisplay")
@@ -161,6 +164,7 @@ function addCard(name) {
     currentDeck.push(name);
     checkDeckValidity();
     updateDeckDisplay();
+    updateCardTypeGreyOut();
 }
 
 function removeCard(name) {
@@ -171,8 +175,12 @@ function removeCard(name) {
     }
     updateDeckDisplay();
     checkDeckValidity();
+    updateCardTypeGreyOut();
 }
 
+// =========================================
+// GAME: stack selection + play board
+// =========================================
 function selectDeck(deckID) {
     if (selectedStacks.includes(deckID)) {
         selectedStacks.splice(selectedStacks.indexOf(deckID),1);
@@ -421,6 +429,9 @@ function flipCard(position) {
     updateBoard();
 }
 
+// =========================================
+// HELPERS: card type, shuffle, validation
+// =========================================
 function getCardType(card) {
   if (heroNames.includes(card)) return "hero";
   if (itemNames.includes(card)) return "item";
@@ -569,30 +580,6 @@ function checkDeckValidity() {
     }
 }
 
-function saveDeckLists(save = true) {
-    if (checkDeckList() == true && save) {
-        deckLists.push(currentDeck);
-        localStorage.setItem("DeckLists", JSON.stringify(deckLists));
-        currentDeck = [];
-    }
-    else if (checkDeckList(true) && save) {
-        currentDeck = [];
-    }
-    if (save) {
-        updateDeckDisplay();
-        loadDeckLists();
-    }
-    document.getElementById("mainCardDisplay").style = 'display: none;'
-    showCurrentDeck(false);
-    document.getElementById("currentDeckDisplay").classList.remove("show");
-    document.getElementById("currentDeckDisplay").classList.remove("minimized");
-    document.getElementById("loadedCardDisplay").classList.remove("minimized");
-    document.getElementById("saveButton").style = "display: none;";
-    document.getElementById("saveStack").style = "display: none;";
-    document.getElementById("buildButton").style = 'display = ""';
-    
-}
-
 function checkDeckList(ignoreDuplicates = false) {
     
     let sortedArray1 = []
@@ -672,366 +659,77 @@ function getRank(cardName) {
     return 99; 
 }
 
-function fetchSavedStacks() {
-    let myJson = localStorage.getItem("DeckLists");
-    console.log("Fetching myJson!")
-    console.log(myJson);
-    if (myJson == "undefined")
-    {
-        console.log("No saved decks found");
-        return;
-    }
-    deckLists = JSON.parse(myJson) || [];
-}
+function updateCardTypeGreyOut() {
+    // Count cards by type
+    let heroCount = 0;
+    let heartCount = 0;
+    let itemCount = 0;
+    let trapCount = 0;
+    let landCount = 0;
 
-function minimizeLoadedStacks() {
-    const loadedDeckTitle = document.getElementById("loadedDeckTitle");
-    const loadedStackDisplay = document.getElementById("loadedCardDisplay")
-    loadedStackDisplay.classList.toggle("minimized");
-    if (loadedStackDisplay.classList.contains("minimized")) {
-        loadedDeckTitle.innerHTML = "- Saved Stacks -";
-    }
-    else {
-        loadedDeckTitle.innerHTML = "v Saved Stacks v";
-    }
-    //WORKING ON THIS SO YOU CAN MINIMIZE THE CURRENT STACKS SECTION
-}
-
-//Gemini Solution
-function loadDeckLists() {
-    fetchSavedStacks();
-    
-    const deckDisplayHTML = document.getElementById("loadedCardDisplay");
-
-    if (deckLists.length == 0) {
-        deckDisplayHTML.style = "display: none;"
-    }
-
-
-    // 1. Handle the "Hidden" logic for the Title
-    let hiddenClass = "";
-    if (!deckDisplayHTML.classList.contains("hidden")) {
-        hiddenClass = "hidden";
-    }
-    
-    // 2. Start building the HTML String
-    // We add the Title first
-    let finalHTML = '<div id="loadedDeckTitle" class="' + hiddenClass + '" onclick="minimizeLoadedStacks()">v Saved Stacks v</div>';
-    
-    // 3. Open the Wrapper Div (This prevents the animation bugs)
-    finalHTML += '<div id="loadedCardWrapper">';
-
-    // 4. Build the Decks and Buttons Structure
-    if (deckLists.length > 0) {
-        // Note: toggling class on an element that doesn't exist yet (loadedDeckTitle) 
-        // via getElementById here would fail, so we handle visibility via CSS classes later if needed.
-    }
-
-    // We use 'map' or 'forEach' to build the string structure first
-    deckLists.forEach((deckList, index) => {
-        // Sort the deck
-        deckList.sort((a, b) => {
-            return getRank(a) - getRank(b);
-        });
-
-        // Append the Deck DIV and the Buttons to our string
-        finalHTML += `
-            <div id="loadedDeck${index}"></div>
-            <button onclick="editDeck(${index})">Edit</button>
-            <button onclick="deleteDeck(${index}, true)">Delete</button>
-        `;
-    });
-
-    // 5. Close the Wrapper Div
-    finalHTML += '</div>';
-
-    // 6. INJECT into the DOM (This creates the elements)
-    deckDisplayHTML.innerHTML = finalHTML;
-
-    // 7. Populate Images (Now that the elements actually exist)
-    deckLists.forEach((deckList, index) => {
-        const imageHTML = document.getElementById("loadedDeck" + index);
-        
-        let imagesString = ""; // Build image string efficiently
-        deckList.forEach(card => {
-            imagesString += '<img class="loadedCard" src="./Pictures/fronts/' + card + '.png" alt="">';
-            if (heroNames.includes(card)) {
-                imagesString += '<img class="loadedCard" src="./Pictures/backs/' + card + '.png" alt="">';
-            }
-        });
-        
-        imageHTML.innerHTML = imagesString;
-        
-        // Add the click listener
-        imageHTML.addEventListener('click', () => {
-            selectDeck("loadedDeck" + index);
-        });
-    });
-
-    // 8. Handle Title Visibility Toggle Logic (Post-Injection)
-    if (deckLists.length > 0) {
-        // Now we can safely find the title and toggle if needed
-        const titleEl = document.getElementById("loadedDeckTitle");
-        if(titleEl) titleEl.classList.toggle(hiddenClass); 
-    }
-}
-
-// function loadDeckLists2() {
-
-//     fetchSavedStacks()
-
-//     const deckDisplayHTML = document.getElementById("loadedCardDisplay");
-
-//     // if (!deckDisplayHTML.classList.contains("hidden")) {
-//     //     deckDisplayHTML.classList.toggle("hidden");
-//     //     return;
-//     // }
-
-//     let hidden = "";
-
-//     if (!deckDisplayHTML.classList.contains("hidden")) {
-//         hidden="hidden";
-//     }
-
-//     deckDisplayHTML.innerHTML = '<div id="loadedDeckTitle" class="' + hidden + '" onclick="minimizeLoadedStacks()">v Current Stacks v</div>';
-//     let deckCount = -1;
-
-//     if (deckLists.length > 0) {
-//         document.getElementById("loadedDeckTitle").classList.toggle(hidden);
-//     }
-//     deckLists.forEach(deckList => {
-//         deckList.sort((a,b) => {
-//             return getRank(a) - getRank(b);
-//         })
-//         deckCount++;
-//         deckDisplayHTML.innerHTML = deckDisplayHTML.innerHTML + '<div id="loadedDeck' + deckCount + '"></div><button onclick="editDeck(' + deckCount + ')">Edit</button><button onclick="deleteDeck(' + deckCount + ',true)">Delete</button>'
-
-//         const imageHTML = document.getElementById("loadedDeck" + deckCount);
-
-//             deckList.forEach(card => {
-//             imageHTML.innerHTML = imageHTML.innerHTML + '<img class="loadedCard" src="./Pictures/fronts/' + card + '.png" alt="">'
-//             if (heroNames.includes(card)) {
-//                 imageHTML.innerHTML = imageHTML.innerHTML + '<img class="loadedCard" src="./Pictures/backs/' + card + '.png" alt="">'
-//             }
-//             })
-//         })
-
-        
-//         // deckDisplayHTML.innerHTML = '<div id="loadedStacksContainer">' + deckDisplayHTML.innerHTML + '</div>'
-
-//     for (let i = 0; i <= deckCount; i++) {
-//             document.getElementById("loadedDeck" + i).addEventListener('click',() => {
-//             selectDeck("loadedDeck" + i);
-//         })
-//     }
-// }
-
-// function editDeck(deckNumber) {
-//     // let deleteDeck = "";
-//     if (currentDeck.length != 0) {
-//         if(confirm("WARNING - This will delete the stack you are currently building. Would you like to proceed?")) {
-//             console.log("OK to delete deck!")
-//         }
-//         else {
-//             return;
-//         }
-//     }
-//     createNewDeck();
-//     let tmpDeck = currentDeck;
-//     currentDeck = deckLists[deckNumber];
-//     deleteDeck(deckNumber, false);
-//     updateDeckDisplay();
-//     showCurrentDeck(true);
-//     minimizeLoadedStacks();
-//     checkDeckValidity();
-//     if (deckLists.length == 0) {
-//         document.getElementById("loadedCardDisplay").classList.add("minimized");
-//     }
-// }
-
-// function deleteDeck(deckNumber, save = true) {
-//     console.log("Deleting Deck!");
-//     deckLists.splice(deckNumber,1);
-//     if (save) {
-//         localStorage.setItem("Decklists", JSON.stringify(deckLists));
-//     }
-//     saveDeckLists(save);
-//     loadDeckLists();
-// }
-
-function editDeck(deckNumber) {
-    // 1. Check if the current workspace is occupied
-    if (currentDeck.length != 0) {
-        // Ask ONCE. If they click Cancel/No, we stop immediately.
-        if (!confirm("WARNING - This will delete the stack you are currently building. Would you like to proceed?")) {
-            return;
+    currentDeck.forEach(card => {
+        switch(getCardType(card)) {
+            case "hero":
+                heroCount++;
+                break;
+            case "heart":
+                heartCount++;
+                break;
+            case "item":
+                itemCount++;
+                break;
+            case "trap":
+                trapCount++;
+                break;
+            case "land":
+                landCount++;
+                break;
         }
-    }
+    });
 
-    // 2. Prepare the UI/Variables
-    // (Assuming createNewDeck clears the board, we do this after the confirm)
-    createNewDeck(); 
+    // Maximum desired counts
+    const maxCounts = {
+        hero: 1,
+        heart: 1,
+        item: 3,
+        trap: 2,
+        land: 2
+    };
 
-    // 3. Capture the deck you want to edit BEFORE deleting it from the list
-    // We create a reference to it so we don't lose it when we splice the array
-    let deckToLoad = deckLists[deckNumber];
+    // Map card types to their display element IDs
+    const typeToDisplay = {
+        hero: "heroDisplay",
+        heart: "heartDisplay",
+        item: "itemDisplay",
+        trap: "trapDisplay",
+        land: "landDisplay"
+    };
 
-    // 4. Delete the deck from the saved list
-    // We pass 'false' for save (per your original code) and 'true' to SKIP confirmations
-    deleteDeck(deckNumber, false, true); 
+    // Update grey out state for each type
+    const types = [
+        { type: "hero", count: heroCount },
+        { type: "heart", count: heartCount },
+        { type: "item", count: itemCount },
+        { type: "trap", count: trapCount },
+        { type: "land", count: landCount }
+    ];
 
-    // 5. Set the current deck to the one we just pulled
-    currentDeck = deckToLoad;
-
-    // 6. Update UI
-    updateDeckDisplay();
-    showCurrentDeck(true);
-    minimizeLoadedStacks();
-    checkDeckValidity();
-    
-    // if (deckLists.length == 0) {
-        document.getElementById("loadedCardDisplay").classList.add("minimized");
-    // }
+    types.forEach(({ type, count }) => {
+        const displayElement = document.getElementById(typeToDisplay[type]);
+        if (displayElement) {
+            if (count >= maxCounts[type]) {
+                displayElement.classList.add("greyedOut");
+            } else {
+                displayElement.classList.remove("greyedOut");
+            }
+        }
+    });
 }
 
-function showPage() {
-    this.document.getElementById("wholePage").style = 'display: "";'
-}
-
-function scrollBoardToPosition(position) {
-    //not done yet, button inside playmat div, planning to have this allow the startScroll function to instead just jump to a specific position
-}
-
-//chat gpt code being tested --------------------------------------------------------------------
-
-let animationFrameId = null; // Replaces scrollInterval
-let currentX = 0;
-let lastTime = 0; // Tracks the timestamp of the previous frame
-
-// We keep your speed of 10, but treat it as "10px per 60hz frame"
-let scrollSpeed = 18; 
-
-const gameBoard = document.getElementById("gameBoard");
-const gameScreen = document.getElementById("gameScreen");
-const miniMapBox = document.getElementById("miniMapBox");
-
-function startScroll(direction) {
-    // If already scrolling, don't start a new loop
-    if (animationFrameId) return;
-
-    // Initialize the time tracker to 'now' so the first frame doesn't jump
-    lastTime = performance.now();
-
-    function animate(timestamp) {
-        // 1. Calculate Delta Time (time passed since last frame in ms)
-        const deltaTime = timestamp - lastTime;
-        lastTime = timestamp;
-
-        // 2. Calculate smooth movement
-        // We normalize to 60FPS (16.67ms). 
-        // If the screen is 144hz, deltaTime is lower, so movement is smaller.
-        const timeScale = deltaTime / 16.67; 
-        const moveAmount = (direction * scrollSpeed) * timeScale;
-
-        // 3. Update Position
-        const boardWidth = gameBoard.scrollWidth;
-        const screenWidth = gameScreen.clientWidth;
-
-        currentX += moveAmount;
-
-        // Clamp scrolling
-        const maxLeft = 0;
-        const maxRight = screenWidth - boardWidth;
-
-        if (currentX > maxLeft) currentX = maxLeft;
-        if (currentX < maxRight) currentX = maxRight;
-
-        gameBoard.style.transform = `translateX(${currentX}px)`;
-        miniMapBox.style.transform = `translateX(${currentX / -3.03}px)`;
-
-        // 4. Request the next frame
-        animationFrameId = requestAnimationFrame(animate);
-    }
-
-    // Start the loop
-    animationFrameId = requestAnimationFrame(animate);
-}
-
-// You will likely need a function to stop the animation as well
-function stopScroll() {
-    if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-    }
-}
-
-
-
-
-
-
-
-
-// let scrollInterval = null;
-// let currentX = 0;
-// let scrollSpeed = 10; // px per frame
-
-// const gameBoard = document.getElementById("gameBoard");
-// const gameScreen = document.getElementById("gameScreen");
-// const miniMapBox = document.getElementById("miniMapBox");
-
-// function startScroll(direction) {
-//     if (scrollInterval) return;
-
-//     scrollInterval = setInterval(() => {
-//         const boardWidth = gameBoard.scrollWidth;
-//         const screenWidth = gameScreen.clientWidth;
-
-//         currentX += direction * scrollSpeed;
-
-//         // Clamp scrolling
-//         const maxLeft = 0;
-//         const maxRight = screenWidth - boardWidth;
-
-//         if (currentX > maxLeft) currentX = maxLeft;
-//         if (currentX < maxRight) currentX = maxRight;
-
-//         gameBoard.style.transform = `translateX(${currentX}px)`;
-//         miniMapBox.style.transform = `translateX(${currentX / -3.03}px)`;
-//     }, 16);
-// }
-
-function increaseScrollSpeed(yes) {
-    if (yes) {
-        scrollSpeed += 3
-    }
-    else {
-        scrollSpeed -= 3
-    }
-}
-
-// function stopScroll() {
-//     clearInterval(scrollInterval);
-//     scrollInterval = null;
-// }
-
-document.getElementById("leftArrowContainer")
-    .addEventListener("mouseenter", () => startScroll(1));
-
-document.getElementById("rightArrowContainer")
-    .addEventListener("mouseenter", () => startScroll(-1));
-
-document.getElementById("leftArrowContainer")
-    .addEventListener("mouseleave", stopScroll);
-
-document.getElementById("rightArrowContainer")
-    .addEventListener("mouseleave", stopScroll);
-
-    //AI LOGIC FOR DELETE, SAVE, AND EDIT
-
-    // ==========================================
-// 1. DATA HELPERS (Internal Use Only)
-// ==========================================
+// =========================================
+// SAVED STACKS: storage + sidebar UI
+// =========================================
+let editing = false;
 
 function writeToStorage() {
     localStorage.setItem("DeckLists", JSON.stringify(deckLists));
@@ -1046,10 +744,6 @@ function readFromStorage() {
         deckLists = JSON.parse(myJson);
     }
 }
-
-// ==========================================
-// 2. UI HELPERS (Internal Use Only)
-// ==========================================
 
 function renderSavedStacksSidebar() {
     const deckDisplayHTML = document.getElementById("loadedCardDisplay");
@@ -1115,107 +809,59 @@ function renderSavedStacksSidebar() {
     }
 }
 
-// function clearBuilderInterface() {
-//     // Hide the builder area
-//     document.getElementById("mainCardDisplay").style = 'display: none;';
-    
-//     // Hide the current deck lists
-//     showCurrentDeck(false);
-//     const curDeckDisp = document.getElementById("currentDeckDisplay");
-//     curDeckDisp.classList.remove("show");
-//     curDeckDisp.classList.remove("minimized");
-    
-//     // Reset buttons
-//     document.getElementById("loadedCardDisplay").classList.remove("minimized");
-//     document.getElementById("saveButton").style = "display: none;";
-//     document.getElementById("saveStack").style = "display: none;";
-//     document.getElementById("buildButton").style = ""; 
-    
-//     // Wipe the variable
-//     currentDeck = [];
-// }
-
-
-function clearBuilderInterface() {
-    // Hide the builder area
-    document.getElementById("mainCardDisplay").style = 'display: none;';
-    
-    // Hide the current deck lists
-    showCurrentDeck(false);
-    const curDeckDisp = document.getElementById("currentDeckDisplay");
-    curDeckDisp.classList.remove("show");
-    curDeckDisp.classList.remove("minimized");
-    
-    // Reset buttons
-    document.getElementById("loadedCardDisplay").classList.remove("minimized");
-    document.getElementById("saveButton").style = "display: none;";
-    document.getElementById("saveStack").style = "display: none;";
-    document.getElementById("buildButton").style = ""; 
-    
-    // NOTE: We do NOT clear currentDeck = [] here anymore. 
-    // We let the save function decide if the data should be wiped.
+function minimizeLoadedStacks() {
+    const loadedDeckTitle = document.getElementById("loadedDeckTitle");
+    const loadedStackDisplay = document.getElementById("loadedCardDisplay")
+    loadedStackDisplay.classList.toggle("minimized");
+    if (loadedStackDisplay.classList.contains("minimized")) {
+        loadedDeckTitle.innerHTML = "- Saved Stacks -";
+    }
+    else {
+        loadedDeckTitle.innerHTML = "v Saved Stacks v";
+    }
 }
-
-// ==========================================
-// 3. MAIN ACTIONS (Called by HTML)
-// ==========================================
-
-let editing = false
 
 function loadDeckLists() {
     readFromStorage();          
     renderSavedStacksSidebar(); 
 }
 
-// function deleteDeck(deckNumber, save = true) {
-//     if (currentDeck.length > 0) {
-//         if (!confirm("Editing this deck will delete the current stack, continue?")) return;
-//     } 
-//     if (!editing) {
-//         if (!confirm("Are you sure you want to delete this deck?")) return;
-//     }
+function editDeck(deckNumber) {
+    // 1. Check if the current workspace is occupied
+    if (currentDeck.length != 0) {
+        // Ask ONCE. If they click Cancel/No, we stop immediately.
+        if (!confirm("WARNING - This will delete the stack you are currently building. Would you like to proceed?")) {
+            return;
+        }
+    }
 
-//     console.log("Deleting Deck " + deckNumber);
+    // 2. Prepare the UI/Variables
+    // (Assuming createNewDeck clears the board, we do this after the confirm)
+    createNewDeck(); 
 
-//     // 1. Modify Data
-//     deckLists.splice(deckNumber, 1);
+    // 3. Capture the deck you want to edit BEFORE deleting it from the list
+    // We create a reference to it so we don't lose it when we splice the array
+    let deckToLoad = deckLists[deckNumber];
 
-//     // 2. Save Data (Only if save is true, though usually we always want this)
-//     if (save) {
-//         writeToStorage();
-//     }
+    // 4. Delete the deck from the saved list
+    // We pass 'false' for save (per your original code) and 'true' to SKIP confirmations
+    deleteDeck(deckNumber, false, true); 
 
-//     // 3. Update UI
-//     renderSavedStacksSidebar();
-// }
+    // 5. Set the current deck to the one we just pulled
+    currentDeck = deckToLoad;
 
-// function saveDeckLists(save = true) {
-//     // 1. Validate
-//     // (Assuming checkDeckList returns true if valid, false if not)
-//     if (checkDeckList() !== true) {
-//         console.log("Cannot save: Deck invalid or duplicate.");
-//         return; 
-//     }
+    // 6. Update UI
+    updateDeckDisplay();
+    updateCardTypeGreyOut();
+    showCurrentDeck(true);
+    minimizeLoadedStacks();
+    checkDeckValidity();
+    
+    // if (deckLists.length == 0) {
+        document.getElementById("loadedCardDisplay").classList.add("minimized");
+    // }
+}
 
-//     if (save) {
-//         // 2. Modify Data
-//         deckLists.push(currentDeck);
-
-//         // 3. Save Data
-//         writeToStorage();
-
-//         // 4. Update UI
-//         renderSavedStacksSidebar();
-        
-//         // 5. Clean up
-//         clearBuilderInterface();
-//     } else {
-//         // If save is false, we just clear the interface without writing to DB
-//         clearBuilderInterface();
-//     }
-// }
-
-// Added 'skipConfirm' parameter (defaults to false so standard delete buttons still ask)
 function deleteDeck(deckNumber, save = true, skipConfirm = false) {
     
     // Only ask for confirmation if skipConfirm is FALSE
@@ -1240,6 +886,26 @@ function deleteDeck(deckNumber, save = true, skipConfirm = false) {
 
     // 3. Update UI
     renderSavedStacksSidebar();
+}
+
+function clearBuilderInterface() {
+    // Hide the builder area
+    document.getElementById("mainCardDisplay").style = 'display: none;';
+    
+    // Hide the current deck lists
+    showCurrentDeck(false);
+    const curDeckDisp = document.getElementById("currentDeckDisplay");
+    curDeckDisp.classList.remove("show");
+    curDeckDisp.classList.remove("minimized");
+    
+    // Reset buttons
+    document.getElementById("loadedCardDisplay").classList.remove("minimized");
+    document.getElementById("saveButton").style = "display: none;";
+    document.getElementById("saveStack").style = "display: none;";
+    document.getElementById("buildButton").style = ""; 
+    
+    // NOTE: We do NOT clear currentDeck = [] here anymore. 
+    // We let the save function decide if the data should be wiped.
 }
 
 function saveDeckLists(save = true) {
@@ -1270,3 +936,92 @@ function saveDeckLists(save = true) {
     // 4. ALWAYS hide the interface, regardless of what happened above
     clearBuilderInterface();
 }
+
+// =========================================
+// SCROLL: board carousel controls
+// =========================================
+function scrollBoardToPosition(position) {
+    // not done yet; planned for jumping to a specific stack position
+}
+
+let animationFrameId = null; // Replaces scrollInterval
+let currentX = 0;
+let lastTime = 0; // Tracks the timestamp of the previous frame
+
+// We keep your speed of 10, but treat it as "10px per 60hz frame"
+let scrollSpeed = 18; 
+
+const gameBoard = document.getElementById("gameBoard");
+const gameScreen = document.getElementById("gameScreen");
+const miniMapBox = document.getElementById("miniMapBox");
+
+function startScroll(direction) {
+    // If already scrolling, don't start a new loop
+    if (animationFrameId) return;
+
+    // Initialize the time tracker to 'now' so the first frame doesn't jump
+    lastTime = performance.now();
+
+    function animate(timestamp) {
+        // 1. Calculate Delta Time (time passed since last frame in ms)
+        const deltaTime = timestamp - lastTime;
+        lastTime = timestamp;
+
+        // 2. Calculate smooth movement
+        // We normalize to 60FPS (16.67ms). 
+        // If the screen is 144hz, deltaTime is lower, so movement is smaller.
+        const timeScale = deltaTime / 16.67; 
+        const moveAmount = (direction * scrollSpeed) * timeScale;
+
+        // 3. Update Position
+        const boardWidth = gameBoard.scrollWidth;
+        const screenWidth = gameScreen.clientWidth;
+
+        currentX += moveAmount;
+
+        // Clamp scrolling
+        const maxLeft = 0;
+        const maxRight = screenWidth - boardWidth;
+
+        if (currentX > maxLeft) currentX = maxLeft;
+        if (currentX < maxRight) currentX = maxRight;
+
+        gameBoard.style.transform = `translateX(${currentX}px)`;
+        miniMapBox.style.transform = `translateX(${currentX / -3.03}px)`;
+
+        // 4. Request the next frame
+        animationFrameId = requestAnimationFrame(animate);
+    }
+
+    // Start the loop
+    animationFrameId = requestAnimationFrame(animate);
+}
+
+// You will likely need a function to stop the animation as well
+function stopScroll() {
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+}
+
+function increaseScrollSpeed(yes) {
+    if (yes) {
+        scrollSpeed += 3
+    }
+    else {
+        scrollSpeed -= 3
+    }
+}
+// Hover-based controls for the carousel arrows.
+document.getElementById("leftArrowContainer")
+    .addEventListener("mouseenter", () => startScroll(1));
+
+document.getElementById("rightArrowContainer")
+    .addEventListener("mouseenter", () => startScroll(-1));
+
+document.getElementById("leftArrowContainer")
+    .addEventListener("mouseleave", stopScroll);
+
+document.getElementById("rightArrowContainer")
+    .addEventListener("mouseleave", stopScroll);
