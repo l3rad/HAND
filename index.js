@@ -613,7 +613,7 @@ function showCurrentDeck(show) {
 function checkDeckValidity() {
     if (checkDeckList() == true) {
         document.getElementById("saveButton").style = 'display: none;';
-        document.getElementById("saveStack").style = 'display: ""; background-color: rgb(34, 182, 145); color: black;';
+        document.getElementById("saveStack").style = 'display: "";';
     }
     else {
         document.getElementById("saveButton").style = 'display: "";';

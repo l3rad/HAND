@@ -11,278 +11,475 @@
             <img src="./Pictures/HANDLogo.png" />
         </div>
 
-        <div id="gameModeBackground"></div>
+        <div id="divDiscordLink">
+            <a id="" class="aDiscordLink" href="https://discord.gg/aH3zwThw" target="_blank" rel="noopener noreferrer">
+                <img id="" class="imgDiscordLink imgDiscordLink1" src="./Pictures/DiscordLogo.png" alt="" />
+            </a>
+            <div id="" class="joinThe discord"><-- Join the Discord!</div>
+                    <a id="" class="aDiscordLink"
+                        href="https://www.kickstarter.com/projects/heroesandnemesesduel/457231728?ref=ayf0tz&token=38c4dbfb"
+                        target="_blank" rel="noopener noreferrer">
+                        <img id="" class="imgDiscordLink imgDiscordLink2" src="./Pictures/KickstarterLogo.png" alt="" />
+                    </a>
+                    <div id="" class="joinThe kickstarter"><-- Kickstarter coming soon!</div>
+                    </div>
 
-        <div id="mainButtons">
-            <button class="mainButton" id="buildButton" title="Build a new Stack"
-                onclick="createNewDeck()">Build</button>
-            <button class="mainButton" id="saveButton" style="display: none;" title="Save stack being built"
-                onclick="saveDeckLists(false)">Save Builder</button>
-            <button class="mainButton" id="saveStack" style="display: none;" title="Save stack being built"
-                onclick="saveDeckLists(true)">Save Stack!</button>
-        </div>
-        <div id="playButtonDiv">
-            <button id="playButton" class="playButtonNotReady" title="Select 2 Saved Stacks to play!"
-                onclick="launchGame()">PLAY</button>
-        </div>
-        <div>
-            <div id="loadedCardDisplay"><!-- anything here will be cleared and replaced--></div>
-        </div>
+                    <div id="gameModeBackground"></div>
 
-        <div id="mainCardDisplay" style="display:none;">
-            <div id="deckBuilderText">Click on a card to add it to your stack! Click on a card in your stack to remove
-                it.
+                    <div id="mainButtons">
+                        <button class="mainButton" id="buildButton" title="Build a new Stack"
+                            onclick="createNewDeck()">BUILD</button>
+                        <button class="mainButton" id="saveButton" style="display: none;" title="Save stack being built"
+                            onclick="saveDeckLists(false)">Save Builder</button>
+                        <button class="mainButton" id="saveStack" style="display: none;" title="Save stack being built"
+                            onclick="saveDeckLists(true)">Save Stack!</button>
+                    </div>
+                    <div id="playButtonDiv">
+                        <button id="playButton" class="playButtonNotReady" title="Select 2 Saved Stacks to play!"
+                            onclick="launchGame()">PLAY</button>
+                    </div>
+                    <div>
+                        <div id="loadedCardDisplay"><!-- anything here will be cleared and replaced--></div>
+                    </div>
+
+                    <div id="mainCardDisplay" style="display:none;">
+                        <div id="deckBuilderText">Click on a card to add it to your stack! Click on a card in your stack
+                            to
+                            remove
+                            it.
+                        </div>
+                        <div id="mainCardDisplayContainer" class="minimized">
+                            <div id="heroDisplay">
+                            </div>
+                            <div id="heartDisplay">
+                            </div>
+                            <div id="itemDisplay">
+                            </div>
+                            <div id="trapDisplay">
+                            </div>
+                            <div id="landDisplay">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="currentDeckDisplay">
+                        <div id="deckDisplayButtonDiv">
+                            <button id="deckDisplayButton" onClick="hideCurrentDeckDisplay()">Hide</button>
+                        </div>
+                    </div>
             </div>
-            <div id="mainCardDisplayContainer" class="minimized">
-                <div id="heroDisplay">
+            <div id="gameScreen" style="display: none;">
+
+                <div id="miniMapBox">
+                    [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</div>
+                <div id="gameMiniMap" onclick="deselectCard()"></div>
+                <div id="playMat">
+                    <!-- <button id="jumpToHero"></button> -->
                 </div>
-                <div id="heartDisplay">
-                </div>
-                <div id="itemDisplay">
-                </div>
-                <div id="trapDisplay">
-                </div>
-                <div id="landDisplay">
+                <div id="gameBoard"></div>
+                <div id="moveArrows">
+                    <div id="leftArrowContainer">
+                        <img title="Click to decrease carousel speed." onclick="increaseScrollSpeed(false)"
+                            src="./Pictures/leftarrow.png" alt="" id="leftArrow">
+                    </div>
+                    <div id="rightArrowContainer">
+                        <img title="Click to increase carousel speed." onclick="increaseScrollSpeed(true)"
+                            src="./Pictures/rightarrow.png" alt="" id="rightArrow">
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div id="currentDeckDisplay">
-            <div id="deckDisplayButtonDiv">
-                <button id="deckDisplayButton" onClick="hideCurrentDeckDisplay()">Hide</button>
-            </div>
-        </div>
-    </div>
-    <div id="gameScreen" style="display: none;">
+        </html>
 
-        <div id="miniMapBox">
-            [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</div>
-        <div id="gameMiniMap" onclick="deselectCard()"></div>
-        <div id="playMat">
-            <!-- <button id="jumpToHero"></button> -->
-        </div>
-        <div id="gameBoard"></div>
-        <div id="moveArrows">
-            <div id="leftArrowContainer">
-                <img title="Click to decrease carousel speed." onclick="increaseScrollSpeed(false)"
-                    src="./Pictures/leftarrow.png" alt="" id="leftArrow">
-            </div>
-            <div id="rightArrowContainer">
-                <img title="Click to increase carousel speed." onclick="increaseScrollSpeed(true)"
-                    src="./Pictures/rightarrow.png" alt="" id="rightArrow">
-            </div>
-        </div>
-    </div>
-</div>
+        <script src="./index.js"></script>
 
-</html>
-
-<script src="./index.js"></script>
-
-<style>
-    /* =========================================
+        <style>
+            /* =========================================
        1. GLOBAL & UTILITIES
        ========================================= */
-    html {
-        background-color: rgba(0, 0, 0, 0.9);
-        overflow-x: hidden;
-        color: white;
-        scrollbar-gutter: stable;
-        /* font-family: Verdana, Geneva, Tahoma, sans-serif; */
-    }
+            html {
+                background-color: rgba(0, 0, 0, 0.9);
+                overflow-x: hidden;
+                color: white;
+                scrollbar-gutter: stable;
+            }
 
-    button {
-        background-color: black;
-        cursor: pointer;
-        color: white;
-    }
+            button {
+                background-color: black;
+                cursor: pointer;
+                color: white;
+            }
 
-    .hidden {
-        display: none !important;
-    }
+            .hidden {
+                display: none !important;
+            }
 
-    .highlight {
-        border: 5px solid white;
-        margin: -5px 5px !important;
-        background-color: white;
-    }
+            .highlight {
+                border: 5px solid white;
+                margin: -5px 5px !important;
+                background-color: white;
+            }
 
-    .selected {
-        background-color: rgb(34, 182, 145) !important;
-        border: 1px dashed white;
-        margin-right: -6px !important;
-        margin-left: -6px !important;
-        margin-top: -1px;
-        margin-bottom: -1px;
-        border-radius: 10px;
-    }
+            .selected {
+                background-color: rgb(34, 182, 145) !important;
+                border: 1px dashed white;
+                margin-right: -6px !important;
+                margin-left: -6px !important;
+                margin-top: -1px;
+                margin-bottom: -1px;
+                border-radius: 10px;
+            }
 
-    .rotated {
-        transform: rotate(180deg) !important;
-    }
+            .rotated {
+                transform: rotate(180deg) !important;
+            }
 
-    .hoverZoom:hover {
-        transform: scale(1.25) !important;
-    }
+            .hoverZoom:hover {
+                transform: scale(1.25) !important;
+            }
 
-    .moveLeft {
-        transform: translate(-16vw, 0);
-    }
+            .moveLeft {
+                transform: translate(-16vw, 0);
+            }
 
-    .moveRight {
-        transform: translate(16vw, 0);
-    }
+            .moveRight {
+                transform: translate(16vw, 0);
+            }
 
-    /* =========================================
+            /* =========================================
        2. WHOLE PAGE (MENU & DECK BUILDER)
        ========================================= */
 
-    /* Logo */
-    #logoImage img {
-        width: 30vw;
+            /* Logo */
+            #logoImage img {
+                width: 30vw;
+                position: fixed;
+                left: 35vw;
+                bottom: 50px;
+                z-index: -1;
+                display: none;
+            }
+
+            #logoImageMini img {
+                width: 14vw;
+                position: fixed;
+                right: 2vw;
+                top: 2vh;
+                z-index: -1;
+            }
+
+            #divDiscordLink {
+                /* display: flex;
+                flex-wrap: wrap; */
+                position: absolute;
+                top: 0;
+                left: 0;
+                /* width: 250px;
+                height: 120px; */
+                align-items: center;
+            }
+
+            .imgDiscordLink1 {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+            .imgDiscordLink2 {
+                position: absolute;
+                top: 60px;
+                left: 0;
+            }
+
+            .imgDiscordLink {
+                height: 50px;
+                margin-top: 10px;
+                margin-left: 10px;
+                transition: transform 0.25s ease;
+            }
+
+            .imgDiscordLink:hover {
+                transform: scale(1.25);
+            }
+
+            .aDiscordLink:hover+.joinThe.discord {
+                color: rgb(34, 182, 145);
+                transform: scale(1);
+                left: 75px;
+            }
+
+            .aDiscordLink:hover+.joinThe.kickstarter {
+                color: rgb(34, 182, 145);
+                transform: scale(1);
+                left: 75px;
+            }
+
+            .joinThe {
+                color: grey;
+                /* margin-left: -250px; */
+                font-weight: bold;
+                position: absolute;
+                transition: transform 0.2s ease, left 0.2s ease, color 0.5s ease;
+                transform: scale(.1);
+                left: -100px;
+                font-size: 20px;
+                width: 300px;
+                z-index: -100;
+            }
+
+            button {
+                font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            }
+
+            .kickstarter {
+                top: 80px;
+            }
+
+            .discord {
+                top: 20px;
+            }
+
+            /* Main Menu Buttons */
+            #mainButtons {
+                position: absolute;
+                top: 10vh;
+                height: 10vh;
+                width: auto;
+                left: 20vw;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                z-index: 100;
+            }
+
+            /* #mainButtons:has(#saveStack) {
         position: fixed;
-        left: 35vw;
-        bottom: 50px;
-        z-index: -1;
-        display: none;
-    }
+    } */
 
-    #logoImageMini img {
-        width: 14vw;
-        position: fixed;
-        right: 2vw;
-        top: 2vh;
-        z-index: -1;
-    }
+            .mainButton {
+                /* width: 500px; */
+                font-size: 72px;
+                /* margin-bottom: 20px; */
+                transition: transform 0.25s ease;
 
-    /* Main Menu Buttons */
-    #mainButtons {
-        position: fixed;
-        top: 5vh;
-        height: 5vh;
-        width: 40vw;
-        left: 30vw;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        position: fixed;
-        z-index: 100;
-    }
+            }
 
-    .mainButton {
-        /* width: 500px; */
-        font-size: 72px;
-        margin-bottom: 20px;
-        transition: transform 0.25s ease;
+            .mainButton:hover {
+                transform: scale(1.25);
+            }
 
-    }
-
-    .mainButton:hover {
-        transform: scale(1.25);
-    }
-
-    /* Play Button Area */
-    #playButtonDiv {
-        position: absolute;
-        top: 15vh;
-        width: 40vw;
-        left: 30vw;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-    }
-
-    #playButton {
-        /* 1. LAYOUT */
-        width: 200px;
-        font-size: 72px;
-        margin-top: 10px;
-        position: absolute;
-        border-radius: 5px;
-
-        /* 2. THE FILL SYSTEM */
-        /* The "Empty" color underneath */
-        background-color: grey;
-
-        /* The "Full" color (Green) essentially painted as an image on top */
-        /* We use linear-gradient simply to create a solid block of color */
-        background-image: linear-gradient(rgb(34, 182, 145), rgb(34, 182, 145));
-
-        /* Stop the green from repeating so we can control its size */
-        background-repeat: no-repeat;
-
-        /* 3. ANIMATION SETTINGS */
-        /* We animate background-size (the fill) and transform (the hover scale) */
-        transition: background-size 0.25s ease, transform 0.25s ease;
-        /* transform: scale(0.9); */
-    }
-
-    /* STATE 1: NOT READY (0% Filled) */
-    .playButtonNotReady {
-        /* Width is 0, Height is 100% */
-        background-size: 0% 100%;
-        color: white;
-        cursor: auto;
-        transform: scale(0.75) !important;
-    }
-
-    /* STATE 2: HALF READY (50% Filled) */
-    .playButtonHalfReady {
-        /* Width is 50% */
-        background-size: 50% 100%;
-        color: white;
-        /* User requested change to black text here */
-        cursor: auto;
-        transform: scale(0.75) !important;
-    }
-
-    /* STATE 3: READY (100% Filled) */
-    .playButtonReady {
-        /* Width is 100% */
-        background-size: 100% 100%;
-        color: black;
-        font-weight: bolder;
-        cursor: pointer;
-        transform: scale(1);
-    }
-
-    /* HOVER EFFECTS */
-    /* We keep these separate to ensure they don't conflict with the fill state */
-    .playButtonNotReady:hover,
-    .playButtonHalfReady:hover {
-        transform: scale(0.75) !important;
-    }
-
-    .playButtonReady:hover {
-        transform: scale(1.75);
-    }
-
-    #playButton:hover {
-        transform: scale(1.25);
-    }
-
-    /* Loaded Deck Display */
-    #loadedDeckTitle {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        margin-top: 8px;
-        font-weight: bold;
-        font-size: 24px;
-        background-color: black;
-        transition-property: background-color, transform, color;
-        transition-duration: 0.5s;
-    }
-
-    #loadedDeckTitle:hover {
-        transform: scale(1.25);
+            /* #saveStack {
         background-color: rgb(34, 182, 145);
         color: black;
-        /* font-weight: bolder; */
-        cursor: pointer;
-    }
+    } */
 
-    /* #loadedCardDisplay {
+            @keyframes phaseInEffect {
+                0% {
+                    opacity: 0;
+                    transform: scale(0.9);
+                    /* Starts slightly smaller */
+                    filter: blur(10px);
+                    /* Starts blurry */
+                }
+
+                100% {
+                    opacity: 1;
+                    transform: scale(1);
+                    /* Normal size */
+                    filter: blur(0px);
+                    /* Sharp */
+                }
+            }
+
+            #saveStack {
+                /* Your existing styles */
+                background-color: rgb(34, 182, 145);
+                color: black;
+
+                font-weight: bolder;
+
+                /* REQUIRED for the effect: */
+                position: fixed;
+                /* Establishes a container for the absolute shimmer */
+                overflow: hidden;
+                /* Hides the shimmer when it moves outside the box */
+
+                /* Optional: Makes it look like a button */
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                animation: phaseInEffect 0.5s ease-out forwards;
+            }
+
+            /* This creates the 'ghost' element that acts as the white line */
+            #saveStack::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -150%;
+                /* Start off-screen to the left */
+                width: 100%;
+                /* Width of the shine beam */
+                height: 100%;
+
+                /* The "White Slashed Line" */
+                /* 120deg tilts it. The middle color is the white line. */
+                background: linear-gradient(120deg,
+                        transparent 20%,
+                        rgba(255, 255, 255, 0.6) 50%,
+                        transparent 80%);
+
+                /* The Movement */
+                animation: shine 2.5s infinite linear;
+                /* Runs every 3 seconds */
+            }
+
+            /* The Animation Logic */
+            @keyframes shine {
+                0% {
+                    left: -150%;
+                    /* Start */
+                }
+
+                50% {
+                    left: 150%;
+                    /* End (middle of animation to allow a pause) */
+                }
+
+                100% {
+                    left: 150%;
+                    /* Stay invisible for the second half (pause) */
+                }
+            }
+
+            /* Play Button Area */
+            #playButtonDiv {
+                position: absolute;
+                top: 10vh;
+                width: 20vw;
+                right: 20vw;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+            }
+
+            #playButton {
+                /* 1. LAYOUT */
+                width: 200px;
+                font-size: 72px;
+                position: absolute;
+                border-radius: 5px;
+
+                /* 2. THE FILL SYSTEM */
+                /* The "Empty" color underneath */
+                background-color: grey;
+
+                /* The "Full" color (Green) essentially painted as an image on top */
+                /* We use linear-gradient simply to create a solid block of color */
+                background-image: linear-gradient(rgb(34, 182, 145), rgb(34, 182, 145));
+
+                /* Stop the green from repeating so we can control its size */
+                background-repeat: no-repeat;
+
+                /* 3. ANIMATION SETTINGS */
+                /* We animate background-size (the fill) and transform (the hover scale) */
+                transition: background-size 0.25s ease, transform 0.25s ease;
+                /* transform: scale(0.9); */
+            }
+
+            /* STATE 1: NOT READY (0% Filled) */
+            .playButtonNotReady {
+                /* Width is 0, Height is 100% */
+                background-size: 0% 100%;
+                color: white;
+                cursor: auto;
+                transform: scale(0.8) !important;
+            }
+
+            /* STATE 2: HALF READY (50% Filled) */
+            .playButtonHalfReady {
+                /* Width is 50% */
+                background-size: 50% 100%;
+                color: white;
+                /* User requested change to black text here */
+                cursor: auto;
+                transform: scale(0.9) !important;
+            }
+
+            /* STATE 3: READY (100% Filled) */
+            .playButtonReady {
+                /* Width is 100% */
+                background-size: 100% 100%;
+                color: black;
+                font-weight: bolder;
+                cursor: pointer;
+                transform: scale(1);
+                position: relative;
+                overflow: hidden;
+            }
+
+            .playButtonReady::after {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: -150%;
+                /* Start off-screen to the left */
+                width: 100%;
+                /* Width of the shine beam */
+                height: 100%;
+
+                /* The "White Slashed Line" */
+                /* 120deg tilts it. The middle color is the white line. */
+                background: linear-gradient(120deg,
+                        transparent 20%,
+                        rgba(255, 255, 255, 0.6) 50%,
+                        transparent 80%);
+
+                /* The Movement */
+                animation: shine 2.5s infinite linear;
+                /* Runs every 3 seconds */
+            }
+
+            /* HOVER EFFECTS */
+            /* We keep these separate to ensure they don't conflict with the fill state */
+            .playButtonNotReady:hover {
+                transform: scale(0.8) !important;
+            }
+
+            .playButtonHalfReady:hover {
+                transform: scale(0.9) !important;
+            }
+
+            .playButtonReady:hover {
+                transform: scale(1.75);
+            }
+
+            #playButton:hover {
+                transform: scale(1.25);
+            }
+
+            /* Loaded Deck Display */
+            #loadedDeckTitle {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                font-weight: bold;
+                font-size: 24px;
+                background-color: black;
+                transition-property: background-color, transform, color;
+                transition-duration: 0.25s;
+            }
+
+            #loadedDeckTitle:hover {
+                transform: scale(1.25);
+                background-color: rgb(34, 182, 145);
+                color: black;
+                /* font-weight: bolder; */
+                cursor: pointer;
+            }
+
+            /* #loadedCardDisplay {
         margin-top: 30vh;
         display: flex;
         flex-wrap: wrap;
@@ -298,619 +495,309 @@
         width: 5vw;
     }*/
 
-    /* #loadedCardDisplay>*:not(:first-child) {
+            /* #loadedCardDisplay>*:not(:first-child) {
         transition-property: display, height;
         transition-delay: 0.5s, 0;
         transition-duration: 0, 0.5s;
         display: flex;
     } */
 
-    #loadedCardDisplay.minimized *:not(:first-child) {
-        display: none !important;
-    }
+            #loadedCardDisplay.minimized *:not(:first-child) {
+                display: none !important;
+            }
 
-    /* THE WINDOW (Handles animation & clipping only) */
-    #loadedCardDisplay {
-        margin-top: 30vh;
-        z-index: -1;
-        /* background-color: rgba(0, 0, 0, .5); */
+            /* THE WINDOW (Handles animation & clipping only) */
+            #loadedCardDisplay {
+                /* margin-top: 30vh; */
+                /* z-index: -1; */
+                position: absolute;
+                transition-property: width, margin-top, margin-left, left, top;
+                transition-duration: 0.25s;
+                transition-timing-function: ease-in-out;
+                width: 100%;
+                overflow: hidden;
+                left: 0;
+                top: 30vh;
+            }
 
-        /* Animation settings */
-        transition-property: width, margin-top;
-        transition-duration: 0.25s, 0.5s;
-        /* transition-delay: 0.25s, 0s; */
-        transition-timing-function: ease-in-out;
-        width: 100%;
-        overflow: hidden;
+            #loadedCardDisplay.minimized {
+                position: absolute;
+                width: 10vw;
+                height: 10vh;
+                /* top: 0; */
+                left: 45vw;
+                top: 10vh;
+                border-radius: 10px;
+            }
 
-    }
-
-    /* THE CONTENT (Handles layout) */
-    #loadedCardWrapper {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
-
-        /* Force width to stay screen-size so children don't squish */
-        width: 98vw;
-        padding-bottom: 20px;
-        /* Optional spacing */
-    }
-
-    #loadedCardWrapper>div {
-        padding-top: 10px;
-        padding-bottom: 10px;
-        padding-right: 5px;
-        padding-left: 5px;
-        margin-right: -5px;
-        margin-left: -5px;
-    }
-
-    /* The Minimized State */
-    #loadedCardDisplay.minimized {
-        width: 14vw;
-        height: 7vh;
-        position: absolute;
-        top: 5px;
-        left: 5px;
-        margin-top: 0;
-        border-radius: 10px;
-    }
-
-    #loadedCardDisplay>* {
-        background-color: black;
-        padding: 10px;
-        padding-bottom: 6px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-    }
-
-    #loadedCardDisplay button {
-        height: 50px;
-        width: auto;
-        margin: none;
-    }
-
-    .loadedCard {
-        width: 9vw;
-    }
-
-    /* Main Card Selection Display */
-    #mainCardDisplayContainer {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        width: 100%;
-        margin-top: 30vh;
-        margin-bottom: 50vh;
-        z-index: -1;
-    }
-
-    /* #mainCardDisplayContainer.minimized {
-        position: absolute;
-        left: -95vw;
-    } */
-
-    #mainCardDisplayContainer>div {
-        width: 20%
-    }
-
-    #mainCardDisplayContainer * * {
-        width: 50%;
-        cursor: pointer;
-    }
-
-    #deckBuilderText {
-        display: flex;
-        width: 100vw;
-        justify-content: space-around;
-        position: absolute;
-        top: 27vh;
-        color: rgb(34, 182, 145);
-    }
-
-    #heroDisplay {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    /* Current Deck Bottom Bar */
-    #currentDeckDisplay {
-        position: fixed;
-        display: flex;
-        flex-wrap: wrap;
-        bottom: 0;
-        left: 95vw;
-        width: 100%;
-        background-color: #333;
-        color: white;
-        padding: 15px 0 15px 20px;
-        height: 24vh;
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: 5vw;
-        transition: left 0.5s ease-out;
-        box-shadow: 12px -12px 30px rgba(0, 0, 0, 0.5);
-    }
+            #loadedCardWrapper {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                align-items: center;
+                width: 98vw;
+                padding-bottom: 20px;
+            }
 
 
-    #currentDeckDisplay.show {
-        left: 0vh;
-    }
 
-    #currentDeckDisplay.minimized {
-        left: 91.5vw;
-    }
+            #loadedCardWrapper>div {
+                padding-top: 10px;
+                padding-bottom: 10px;
+                padding-right: 5px;
+                padding-left: 5px;
+                margin-right: -5px;
+                margin-left: -5px;
+            }
 
-    #currentDeckDisplay>* {
-        height: 25vh;
-        cursor: pointer;
-    }
 
-    .validated {
-        color: rgb(34, 182, 145) !important;
-    }
+            #loadedCardDisplay>* {
+                background-color: black;
+                padding: 10px;
+                padding-bottom: 10px;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                border-radius: 10px;
+            }
 
-    .greyedOut {
-        opacity: 0.3;
-        pointer-events: none;
-    }
+            #loadedCardDisplay button {
+                height: 50px;
+                width: auto;
+                margin: none;
+            }
 
-    #counterHelper {
-        width: 50px;
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: -10px;
-    }
+            .loadedCard {
+                width: 9vw;
+            }
 
-    #deckDisplayButtonDiv {
-        width: 50px;
-        height: 25vh;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around
-            /* margin-left: -0.8vw;
+            /* Main Card Selection Display */
+            #mainCardDisplayContainer {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                width: 100%;
+                margin-top: 30vh;
+                margin-bottom: 50vh;
+                z-index: -1;
+            }
+
+            #mainCardDisplayContainer>div {
+                width: 20%
+            }
+
+            #mainCardDisplayContainer * * {
+                width: 50%;
+                cursor: pointer;
+            }
+
+            #deckBuilderText {
+                display: flex;
+                width: 100vw;
+                justify-content: space-around;
+                position: absolute;
+                top: 27vh;
+                color: rgb(34, 182, 145);
+            }
+
+            #heroDisplay {
+                display: flex;
+                flex-wrap: wrap;
+            }
+
+            /* Current Deck Bottom Bar */
+            #currentDeckDisplay {
+                position: fixed;
+                display: flex;
+                flex-wrap: wrap;
+                bottom: 0;
+                left: 95vw;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.75);
+                color: white;
+                padding: 15px 0 15px 20px;
+                height: 24vh;
+                display: flex;
+                flex-wrap: wrap;
+                margin-left: 5vw;
+                transition: left 0.5s ease-out;
+                box-shadow: 12px -12px 30px rgba(0, 0, 0, 0.5);
+            }
+
+
+            #currentDeckDisplay.show {
+                left: 0vh;
+            }
+
+            #currentDeckDisplay.minimized {
+                left: 91.5vw;
+            }
+
+            #currentDeckDisplay>* {
+                height: 25vh;
+                cursor: pointer;
+            }
+
+            .validated {
+                color: rgb(34, 182, 145) !important;
+            }
+
+            .greyedOut {
+                opacity: 0.3;
+                pointer-events: none;
+            }
+
+            #counterHelper {
+                width: 50px;
+                display: flex;
+                flex-wrap: wrap;
+                margin-left: -10px;
+            }
+
+            #deckDisplayButtonDiv {
+                width: 50px;
+                height: 25vh;
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around
+                    /* margin-left: -0.8vw;
         margin-top: -1vh;
         margin-right: 0.5vw; */
-    }
+            }
 
-    #deckDisplayButton {
-        height: 25px;
-        width: 50px;
-        margin-top: -10px;
-        margin-left: -10px;
-    }
+            #deckDisplayButton {
+                height: 25px;
+                width: 50px;
+                margin-top: -10px;
+                margin-left: -10px;
+            }
 
-    #cardCounter {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        width: 50px;
-        height: 22vh;
-        margin-left: -10px;
-    }
+            #cardCounter {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                width: 50px;
+                height: 22vh;
+                margin-left: -10px;
+            }
 
-    /* Legacy Game Button Div (Commented out in HTML) */
-    .gameButtonDiv {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
-        margin-top: 50px;
-    }
+            /* Legacy Game Button Div (Commented out in HTML) */
+            .gameButtonDiv {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-around;
+                align-items: center;
+                margin-top: 50px;
+            }
 
-    /* =========================================
+            /* =========================================
        3. GAME SCREEN
        ========================================= */
 
-    /* Mini Map */
-    #miniMapBox {
-        position: absolute;
-        top: -3vh;
-        width: 100%;
-        left: -1vw;
-        font-size: 18vh;
-        z-index: 5;
-        font-weight: bolder;
-    }
+            /* Mini Map */
+            #miniMapBox {
+                position: absolute;
+                top: -3vh;
+                width: 100%;
+                left: -1vw;
+                font-size: 18vh;
+                z-index: 5;
+                font-weight: bolder;
+            }
 
-    #gameMiniMap {
-        /* margin-bottom: 20vh; */
-        width: 100%;
-    }
+            #gameMiniMap {
+                /* margin-bottom: 20vh; */
+                width: 100%;
+            }
 
-    #gameMiniMap>#gameBoardmini {
-        /* width: 100vw; */
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-around;
-        top: 4vh;
-        padding: 0;
-        margin-top: 2vh;
-        width: 99%;
-    }
+            #gameMiniMap>#gameBoardmini {
+                /* width: 100vw; */
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: space-around;
+                top: 4vh;
+                padding: 0;
+                margin-top: 2vh;
+                width: 99%;
+            }
 
-    #playMat {
-        height: 24vh;
-        margin-top: 20vh;
-        background-image: url("./Pictures/HANDLogoBlackandWhite.png");
-        background-repeat: repeat;
-        background-size: contain;
-    }
+            #playMat {
+                height: 24vh;
+                margin-top: 20vh;
+                background-image: url("./Pictures/HANDLogoBlackandWhite.png");
+                background-repeat: repeat;
+                background-size: contain;
+            }
 
-    #gameBoardmini {
-        display: flex;
-        flex-wrap: nowrap;
-        padding: 0 100px;
-        position: absolute;
-        bottom: 12vh;
-    }
+            #gameBoardmini {
+                display: flex;
+                flex-wrap: nowrap;
+                padding: 0 100px;
+                position: absolute;
+                bottom: 12vh;
+            }
 
-    #gameBoardmini * {
-        width: 4vw;
-        height: 5.6vw;
-    }
+            #gameBoardmini * {
+                width: 4vw;
+                height: 5.6vw;
+            }
 
-    /* Main Game Board */
-    #gameBoard {
-        display: flex;
-        flex-wrap: nowrap;
-        padding: 0 100px;
-        position: absolute;
-        bottom: 12vh;
-    }
+            /* Main Game Board */
+            #gameBoard {
+                display: flex;
+                flex-wrap: nowrap;
+                padding: 0 100px;
+                position: absolute;
+                bottom: 12vh;
+            }
 
-    #gameBoard>div {
-        transition: transform 0.25s ease-out;
-    }
+            #gameBoard>div {
+                transition: transform 0.25s ease-out;
+            }
 
-    #gameBoard>div>img {
-        width: 15vw;
-        margin: 0 10px;
-        transition: transform 0.5s ease;
-    }
+            #gameBoard>div>img {
+                width: 15vw;
+                margin: 0 10px;
+                transition: transform 0.5s ease;
+            }
 
-    /* Game Card Buttons (JS Generated) */
-    .gameCardButtons {
-        display: flex;
-        justify-content: space-around;
-        height: 0px;
-        position: relative;
-        top: -100px;
-    }
+            /* Game Card Buttons (JS Generated) */
+            .gameCardButtons {
+                display: flex;
+                justify-content: space-around;
+                height: 0px;
+                position: relative;
+                top: -100px;
+            }
 
-    .gameCardButtons button {
-        height: 36px;
-        font-size: 24px;
-    }
+            .gameCardButtons button {
+                height: 36px;
+                font-size: 24px;
+            }
 
-    .gameCardButtons button:hover {
-        transform: scale(1.5);
-    }
+            .gameCardButtons button:hover {
+                transform: scale(1.5);
+            }
 
-    /* Navigation Arrows */
-    #moveArrows {
-        position: absolute;
-        display: flex;
-        flex-wrap: wrap;
-        width: 100%;
-        justify-content: space-between;
-        bottom: 12vh;
-        left: 0;
-        pointer-events: none;
-    }
+            /* Navigation Arrows */
+            #moveArrows {
+                position: absolute;
+                display: flex;
+                flex-wrap: wrap;
+                width: 100%;
+                justify-content: space-between;
+                bottom: 12vh;
+                left: 0;
+                pointer-events: none;
+            }
 
-    #moveArrows div img {
-        width: 8vh;
-        padding: 17.155vh 5px 17.155vh 10px;
-        pointer-events: all;
-    }
+            #moveArrows div img {
+                width: 8vh;
+                padding: 17.155vh 5px 17.155vh 10px;
+                pointer-events: all;
+            }
 
-    #moveArrows div img:hover {
-        background-color: rgba(255, 255, 255, 0.5);
-        cursor: pointer;
-    }
-</style>
-
-<!-- <style>
-    #logoImage img {
-        width: 20vw;
-        position: absolute;
-        left: 40vw;
-        z-index: -1;
-    }
-
-    #gameMiniMap {
-        margin-bottom: 20vh;
-        width: 100%;
-    }
-
-    .highlight {
-        border: 5px solid white;
-        margin: -5px 5px !important;
-        background-color: white;
-    }
-
-    #gameMiniMap>#gameBoardmini {
-        /* width: 100vw; */
-        display: flex;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        top: 4vh;
-        padding: 0;
-        margin-top: 2vh;
-        width: 99%;
-    }
-
-    #miniMapBox {
-        position: absolute;
-        top: -3vh;
-        width: 100%;
-        left: -4vh;
-
-        font-size: 18vh;
-        z-index: 5;
-        font-weight: bolder;
-
-    }
-
-    #gameBoardmini * {
-        width: 4vw;
-        height: 5.6vw;
-
-    }
-
-    #moveArrows {
-        position: absolute;
-        display: flex;
-        flex-wrap: wrap;
-        width: 100%;
-        justify-content: space-between;
-        bottom: 12vh;
-        left: 0;
-        pointer-events: none;
-    }
-
-    .hoverZoom:hover {
-        transform: scale(1.25) !important;
-    }
-
-    #moveArrows div img {
-        width: 8vh;
-        padding: 17.155vh 5px 17.155vh 10px;
-        pointer-events: all;
-    }
-
-    #moveArrows div img:hover {
-        background-color: rgba(255, 255, 255, 0.5);
-        cursor: pointer;
-    }
-
-    #gameBoard {
-        display: flex;
-        flex-wrap: nowrap;
-        padding: 0 100px;
-        position: absolute;
-        bottom: 12vh;
-    }
-
-    #gameBoardmini {
-        display: flex;
-        flex-wrap: nowrap;
-        padding: 0 100px;
-        position: absolute;
-        bottom: 12vh;
-    }
-
-    .gameCardButtons {
-        display: flex;
-        justify-content: space-around;
-        height: 0px;
-        position: relative;
-        top: -100px;
-    }
-
-    .gameCardButtons button:hover {
-        transform: scale(1.5);
-    }
-
-    .gameCardButtons button {
-        height: 36px;
-        font-size: 24px;
-    }
-
-    #gameBoard>div>img {
-        width: 15vw;
-        margin: 0 10px;
-        transition: transform 0.5s ease;
-    }
-
-    #gameBoard>div {
-        transition: transform 0.25s ease-out;
-    }
-
-    .moveLeft {
-        transform: translate(-16vw, 0);
-    }
-
-    .moveRight {
-        transform: translate(16vw, 0);
-    }
-
-    /* 
-    #gameBoard>div>img.rotated {
-        transform: rotate(180deg);
-    } */
-
-    .rotated {
-        transform: rotate(180deg) !important;
-    }
-
-    .selected {
-        background-color: green !important;
-    }
-
-    html {
-        background-color: rgba(0, 0, 0, 0.9);
-        overflow-x: hidden;
-        color: white;
-        /* background-image: url("./Pictures/HANDLogo.png");
-        background-size: 20vw;
-        background-position: 40vw 5vh;
-        background-repeat: no-repeat; */
-        /* background-size + packgroundPosition x 2 = 100*/
-    }
-
-    .hidden {
-        display: none !important;
-    }
-
-    #loadedDeckTitle {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        margin-top: 8px;
-        font-weight: bold;
-        font-size: 24px;
-    }
-
-    #playButtonDiv {
-        width: 40vw;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-    }
-
-    #playButton {
-        font-size: 72px;
-        margin-top: 10px;
-    }
-
-    #loadedCardDisplay>* {
-        background-color: black;
-        padding: 10px;
-        padding-bottom: 6px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        border-radius: 10px;
-    }
-
-    #mainButtons {
-        margin-top: 5vh;
-        width: 40vw;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-    }
-
-    .mainButton {
-        height: 50px;
-        width: 100px;
-        margin-bottom: 20px;
-    }
-
-    .loadedCard {
-        width: 9vw;
-    }
-
-    #loadedCardDisplay {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
-    }
-
-    #loadedCardDisplay button {
-        height: 50px;
-        width: auto;
-        margin: none;
-    }
-
-    #currentDeckDisplay {
-        position: fixed;
-        display: flex;
-        flex-wrap: wrap;
-        bottom: -30vh;
-        left: 0;
-        width: 100%;
-        background-color: #333;
-        color: white;
-        padding: 15px 0 15px 20px;
-        height: 24vh;
-        display: flex;
-        flex-wrap: wrap;
-        margin-left: 125px;
-        transform: 0;
-        transition: bottom 0.5s ease-out;
-        box-shadow: 12px -12px 30px rgba(0, 0, 0, 0.5);
-
-    }
-
-    #deckDisplayButton {
-        width: 3vw;
-        height: 2vh !important;
-        margin-left: -0.8vw;
-        margin-top: -1vh;
-        margin-right: 0.5vw;
-    }
-
-    #currentDeckDisplay.show {
-        bottom: 0vh;
-    }
-
-    #currentDeckDisplay.minimized {
-        bottom: -24vh;
-    }
-
-    #currentDeckDisplay * {
-        height: 25vh;
-        cursor: pointer;
-    }
-
-    .title {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
-        font-weight: bolder;
-        font-size: 64px;
-        margin-top: 50px;
-    }
-
-    .gameButtonDiv {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        align-items: center;
-        margin-top: 50px;
-    }
-
-    #heroDisplay {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    #mainCardDisplay {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        width: 100%;
-    }
-
-    #mainCardDisplay * * {
-        width: 50%;
-        cursor: pointer;
-    }
-
-    #mainCardDisplay>div {
-        width: 20%
-    }
-
-    button {
-        background-color: black;
-        cursor: pointer;
-        color: white;
-    }
-</style> -->
+            #moveArrows div img:hover {
+                background-color: rgba(255, 255, 255, 0.5);
+                cursor: pointer;
+            }
+        </style>
