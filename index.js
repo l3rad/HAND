@@ -944,6 +944,8 @@ function clearBuilderInterface() {
     document.getElementById("saveButton").style = "display: none;";
     document.getElementById("saveStack").style = "display: none;";
     document.getElementById("buildButton").style = ""; 
+
+    window.scrollTo({top: 0, left: 0, behavior: 'instant'})
     
     // NOTE: We do NOT clear currentDeck = [] here anymore. 
     // We let the save function decide if the data should be wiped.
