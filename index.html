@@ -88,6 +88,10 @@
                             src="./Pictures/rightarrow.png" alt="" id="rightArrow">
                     </div>
                 </div>
+                <div id="keyboardControls" title="Keyboard Controls"
+                    onclick="alert('This game can be played with a keyboard or a mouse. Here are the keyboard controls:\n\nCARDS\n\nA: Select card on left\nD: Select card on right\nS: Flip Card\nW: Rotate Card\nQ: Move selected card left\nE: Move selected card right\n\nSCREEN\n\nLeft Arrow: Scroll Hand left\nRight Arrow: Scroll hand right\nUp Arrow: Increase scroll speed\nDown arrow: Decrease scroll speed')">
+                    <img src="Pictures/MouseKeyboard.png" alt="" />
+                </div>
             </div>
         </div>
 
@@ -799,6 +803,27 @@
 
             #moveArrows div img:hover {
                 background-color: rgba(255, 255, 255, 0.5);
+                cursor: pointer;
+            }
+
+            #keyboardControls {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                z-index: -10;
+                margin-bottom: 0;
+                margin-left: 0;
+                transition: transform 0.25s ease, margin-bottom 0.25s ease, margin-left 0.25s ease;
+            }
+
+            #keyboardControls>img {
+                height: 6vh;
+            }
+
+            #keyboardControls:hover {
+                transform: scale(1.25);
+                margin-bottom: 1vh;
+                margin-left: 1vw;
                 cursor: pointer;
             }
         </style>

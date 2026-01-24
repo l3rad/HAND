@@ -303,9 +303,73 @@ function launchGame() {
     updateBoard();
 
     //slide to front of stack and begin
-
+    addKeyboardControls();
     //later create a class for selected and have a search for if something has the classlist class "selected", then add arrows to move, flip, and rotate
 }
+
+function addKeyboardControls() {
+    document.addEventListener('keydown', function(event) {
+        console.log(event.key);
+        if (event.key == 'ArrowRight') {
+            startScroll(-1);
+        }
+        if (event.key == 'ArrowLeft') {
+            startScroll(1);
+        }        
+        if (event.key == "ArrowUp") {
+            scrollBase += 5;
+        }
+        if (event.key == "ArrowDown") {
+            scrollBase -= 5;
+        }
+        if (event.key == 'd') {
+            if (highlightedCard < 18) {
+                selectCard(highlightedCard + 1);
+            }
+        }
+        if (event.key == "a") {
+            if (highlightedCard > 0) {
+                selectCard(highlightedCard - 1);
+            }
+        }
+        if (event.key == "w") {
+            rotateCard(highlightedCard);
+        }
+        if (event.key == "s") {
+            flipCard(highlightedCard);
+        }
+        if (event.key == "q") {
+            moveSelectedCardLeft(highlightedCard);
+        }
+        if (event.key == "e") {
+            moveSelectedCardRight(highlightedCard);
+        }
+    })
+
+    document.addEventListener('keyup', function(event) {
+        if (event.key == 'ArrowRight' || event.key == 'ArrowLeft') {
+            stopScroll();
+        }
+    })
+
+    document.addEventListener('wheel', function(event) {
+        const deltaY = event.deltaY; // Vertical scroll amount
+        console.log(deltaY);
+
+        if (deltaY < 0) {
+            startScroll(1, true);
+        } else if (deltaY > 0) {
+            startScroll(-1, true)
+        }
+        wheelStopTimer = setTimeout(() => {
+        
+            stopScroll();
+        
+        }, 150);
+    })
+}
+
+
 
 function updateBoard() {
     const gameBoard = document.getElementById("gameBoard");
@@ -385,7 +449,9 @@ function deselectCard() {
 
 function moveSelectedCardLeft(position) {
 
-    if (position == 0) {
+    console.log(position);
+
+    if (position < 1 || position > 17) {
         return;
     }
     let selectedCard = currentHand[position];
@@ -407,8 +473,10 @@ function moveSelectedCardLeft(position) {
 }
 
 function moveSelectedCardRight(position) {
+
+    console.log(position);
     
-    if (position == 17) {
+    if (position < 0 || position > 16) {
         return;
     }
     let selectedCard = currentHand[position];
@@ -901,6 +969,7 @@ function editDeck(deckNumber) {
     // if (deckLists.length == 0) {
         document.getElementById("loadedCardDisplay").classList.add("minimized");
     // }
+    selectedStacks = [];
 }
 
 function deleteDeck(deckNumber, save = true, skipConfirm = false) {
@@ -927,6 +996,7 @@ function deleteDeck(deckNumber, save = true, skipConfirm = false) {
 
     // 3. Update UI
     renderSavedStacksSidebar();
+    selectedStacks = [];
 }
 
 function clearBuilderInterface() {
@@ -992,13 +1062,14 @@ let currentX = 0;
 let lastTime = 0; // Tracks the timestamp of the previous frame
 
 // We keep your speed of 10, but treat it as "10px per 60hz frame"
-let scrollSpeed = 18; 
+let scrollSpeed = 0; 
+let scrollBase = 25;
 
 const gameBoard = document.getElementById("gameBoard");
 const gameScreen = document.getElementById("gameScreen");
 const miniMapBox = document.getElementById("miniMapBox");
 
-function startScroll(direction) {
+function startScroll(direction, isScroll = false) {
     // If already scrolling, don't start a new loop
     if (animationFrameId) return;
 
@@ -1013,6 +1084,12 @@ function startScroll(direction) {
         // 2. Calculate smooth movement
         // We normalize to 60FPS (16.67ms). 
         // If the screen is 144hz, deltaTime is lower, so movement is smaller.
+        if (isScroll) {
+            scrollSpeed = scrollBase * 2;
+        }
+        else {
+            scrollSpeed = scrollBase;
+        }
         const timeScale = deltaTime / 16.67; 
         const moveAmount = (direction * scrollSpeed) * timeScale;
 
@@ -1050,10 +1127,10 @@ function stopScroll() {
 
 function increaseScrollSpeed(yes) {
     if (yes) {
-        scrollSpeed += 3
+        scrollBase += 3
     }
     else {
-        scrollSpeed -= 3
+        scrollBase -= 3
     }
 }
 // Hover-based controls for the carousel arrows.
