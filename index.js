@@ -212,6 +212,11 @@ function launchGame() {
         alert("You must have 2 saved stacks selected to play!\n\nTo build a stack, click build and add cards until you meet the requirements (the Save button will turn green)\n\nTo select a stack, have the Saved Stacks pop up open and click on 2 different stacks.");
         return;
     }
+
+    let startX = 0;
+
+
+
     
     //using the names provided in selectedStacks, determine 
     // selectedStacks.forEach(stack => {
@@ -304,7 +309,21 @@ function launchGame() {
 
     //slide to front of stack and begin
     addKeyboardControls();
-    //later create a class for selected and have a search for if something has the classlist class "selected", then add arrows to move, flip, and rotate
+
+    gameBoard.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+
+});
+
+scrollBoardToPosition(100);
+
+gameBoard.addEventListener("touchend", e => {
+  const endX = e.changedTouches[0].clientX;
+  if (endX - startX > 50) selectCard(highlightedCard + 1);
+  if (startX - endX > 50) selectNextCard(highlightedCard - 1);
+});
+
+selectCard(17); //Selects hero that will go first
 }
 
 function addKeyboardControls() {
@@ -369,7 +388,13 @@ function addKeyboardControls() {
     })
 }
 
+function showControls() {
+    document.getElementById("imgControlsContainer").style = 'display: "";';
+}
 
+function hideControls() {
+    document.getElementById("imgControlsContainer").style = 'display: none;';
+}
 
 function updateBoard() {
     const gameBoard = document.getElementById("gameBoard");
@@ -423,12 +448,16 @@ function selectCard(position) {
     //add a class to that card, which the ID will also be the position
     if (highlightedCard >= 0) {
         const curHighlight = document.getElementById(highlightedCard);
+        const miniHighlight = document.getElementById("0." + highlightedCard)
         curHighlight.classList.remove("highlight");
+        miniHighlight.classList.remove("highlightMini")
         document.getElementById("button"+highlightedCard).style = 'display: none;'
     }
     if (position >= 0) {
+        const newMiniHighlight = document.getElementById("0." + position)
         const newHighlight = document.getElementById(position);
         newHighlight.classList.add("highlight");
+        newMiniHighlight.classList.add("highlightMini")
         //display movement, flip, and rotate options above card
         document.getElementById("button"+position).style = 'display: "";'
     }
@@ -442,7 +471,9 @@ function deselectCard() {
     }
 
     const curHighlight = document.getElementById(highlightedCard);
+    const miniHighlight = document.getElementById("0." + highlightedCard)
     curHighlight.classList.remove("highlight");
+    miniHighlight.classList.remove("highlightMini");
     document.getElementById("button"+highlightedCard).style = 'display: none;'
     highlightedCard = -1;
 }
@@ -943,7 +974,7 @@ function editDeck(deckNumber) {
             return;
         }
     }
-
+    
     // 2. Prepare the UI/Variables
     // (Assuming createNewDeck clears the board, we do this after the confirm)
     createNewDeck(); 
@@ -959,17 +990,18 @@ function editDeck(deckNumber) {
     // 5. Set the current deck to the one we just pulled
     currentDeck = deckToLoad;
 
+    selectedStacks = [];
     // 6. Update UI
     updateDeckDisplay();
     updateCardTypeGreyOut();
     showCurrentDeck(true);
     minimizeLoadedStacks();
     checkDeckValidity();
+    validatePlayButton();
     
     // if (deckLists.length == 0) {
         document.getElementById("loadedCardDisplay").classList.add("minimized");
     // }
-    selectedStacks = [];
 }
 
 function deleteDeck(deckNumber, save = true, skipConfirm = false) {
@@ -997,6 +1029,7 @@ function deleteDeck(deckNumber, save = true, skipConfirm = false) {
     // 3. Update UI
     renderSavedStacksSidebar();
     selectedStacks = [];
+    validatePlayButton();
 }
 
 function clearBuilderInterface() {
@@ -1055,6 +1088,19 @@ function saveDeckLists(save = true) {
 // =========================================
 function scrollBoardToPosition(position) {
     // not done yet; planned for jumping to a specific stack position
+    if (position && position >= 0 && position <=100) {
+
+        let boardWidth = gameBoard.scrollWidth;
+        let screenWidth = gameScreen.clientWidth;
+        let maxRight = screenWidth - boardWidth;
+
+        let moveTo = (maxRight / 100) * position;
+        if (currentX < maxRight) currentX = maxRight;
+        else currentX = moveTo;
+
+        gameBoard.style.transform = `translateX(${moveTo}px)`;
+        miniMapBox.style.transform = `translateX(${moveTo / -3.03}px)`;
+    }
 }
 
 let animationFrameId = null; // Replaces scrollInterval
