@@ -1,3 +1,4 @@
-Stack building is now much easier to understand
-Removed buttons when they don't do anything
-Added some animation effects
+This site is actively being updated!
+
+This site also uses local storage for saving stacks.
+To clear this, just delete your stacks or clear your browsers cache.
