@@ -511,7 +511,7 @@
             /* 1. THE WINDOW (Base State) */
             #loadedCardDisplay {
                 /* POSITIONING: Fixed allows smooth movement relative to the screen */
-                position: fixed;
+                position: absolute;
                 top: 25vh;
                 /* Start position */
                 left: 50%;
@@ -526,7 +526,7 @@
                 /* Full width (minus margins) */
                 height: auto;
                 /* Allow it to grow naturally */
-                max-height: 80vh;
+                /* max-height: 80vh; */
                 overflow: hidden;
                 /* CRITICAL: Clips content smoothly during animation */
 

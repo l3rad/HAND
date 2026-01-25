@@ -156,7 +156,7 @@ function createNewDeck() {
     if (!loadedCardDisplay.classList.contains("minimized")) {
         loadedCardDisplay.classList.add("minimized");
     }
-    
+    checkDeckValidity();
 }
 
 function addCard(name) {
@@ -887,8 +887,6 @@ function readFromStorage() {
 
 function renderSavedStacksSidebar() {
     const deckDisplayHTML = document.getElementById("loadedCardDisplay");
-    console.log("here!")
-    console.log(deckLists);
     if (deckLists.length == 0) {
         deckDisplayHTML.style = "display: none;"
         return;
@@ -958,6 +956,7 @@ function minimizeLoadedStacks() {
     }
     else {
         loadedDeckTitle.innerHTML = "v Saved Stacks v";
+        saveDeckLists(false);
     }
 }
 
