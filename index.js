@@ -130,8 +130,15 @@ window.addEventListener('load', function() {
     });
 
     loadDeckLists();
+
     //Remove "hidden" attribute from main page
     showPage();
+    if (deckLists.length == 0) {
+        this.document.getElementById("howToPlayLink").style = 'display: ""'
+    }
+    else {
+        this.document.getElementById("howToPlayLink").style = 'display: "none";'
+    }
 
 });
 
@@ -947,10 +954,15 @@ function renderSavedStacksSidebar() {
     }
 }
 
-function minimizeLoadedStacks() {
+function minimizeLoadedStacks(toggle = true) {
     const loadedDeckTitle = document.getElementById("loadedDeckTitle");
     const loadedStackDisplay = document.getElementById("loadedCardDisplay")
-    loadedStackDisplay.classList.toggle("minimized");
+    if (toggle) {
+        loadedStackDisplay.classList.toggle("minimized");
+    }
+    else if (!loadedStackDisplay.classList.contains("minimized")) {
+            loadedStackDisplay.classList.add("minimized");
+        }
     if (loadedStackDisplay.classList.contains("minimized")) {
         loadedDeckTitle.innerHTML = "- Saved Stacks -";
     }
@@ -994,7 +1006,7 @@ function editDeck(deckNumber) {
     updateDeckDisplay();
     updateCardTypeGreyOut();
     showCurrentDeck(true);
-    minimizeLoadedStacks();
+    minimizeLoadedStacks(false);
     checkDeckValidity();
     validatePlayButton();
     

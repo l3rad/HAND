@@ -10,6 +10,13 @@
         <div id="logoImageMini">
             <img src="./Pictures/HANDLogo.png" />
         </div>
+        <a id="howToPlayLink" href="https://youtu.be/_MLZ7xvFR54" target="_blank" rel="noopener noreferrer">
+            <div id="howToPlayLinkTxt">
+                ?
+            </div>
+            <div id="howToPlayLinkHelper">
+                <-- How to play! (YouTube) </div>
+        </a>
 
         <div id="divDiscordLink">
             <a id="" class="aDiscordLink" href="https://discord.gg/aH3zwThw" target="_blank" rel="noopener noreferrer">
@@ -70,164 +77,238 @@
                     </div>
             </div>
             <div id="gameScreen" style="display: none;">
-
-                <div id="miniMapBox">
-                    [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</div>
-                <div id="gameMiniMap" onclick="deselectCard()"></div>
-                <div id="playMat">
-                    <!-- <button id="jumpToHero"></button> -->
-                </div>
-                <div id="gameBoard"></div>
-                <div id="moveArrows">
-                    <div id="leftArrowContainer">
-                        <img title="Click to decrease carousel speed." src="./Pictures/leftarrow.png" alt=""
-                            id="leftArrow">
-                    </div>
-                    <div id="rightArrowContainer">
-                        <img title="Click to increase carousel speed." src="./Pictures/rightarrow.png" alt=""
-                            id="rightArrow">
-                    </div>
-                </div>
-                <div id="keyboardControls" title="Keyboard Controls" onclick="showControls()">
-                    <img src="Pictures/MouseKeyboard.png" alt="" />
-                </div>
-                <div id="imgControlsContainer" style="display: none;" onclick="hideControls()">
-                    <img src="./Pictures/KeyboardKeysInstruction.png" alt="" id="imgControls">
+                <div id="goBackText" onclick="location.reload()">
+                    < Go Back</div>
+                        <div id="miniMapBox">
+                            [&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;]</div>
+                        <div id="gameMiniMap" onclick="deselectCard()"></div>
+                        <div id="playMat">
+                            <!-- <button id="jumpToHero"></button> -->
+                        </div>
+                        <div id="gameBoard"></div>
+                        <div id="moveArrows">
+                            <div id="leftArrowContainer">
+                                <img src="./Pictures/leftarrow.png" alt="" id="leftArrow">
+                            </div>
+                            <div id="rightArrowContainer">
+                                <img src="./Pictures/rightarrow.png" alt="" id="rightArrow">
+                            </div>
+                        </div>
+                        <div id="keyboardControls" title="Keyboard Controls" onclick="showControls()">
+                            <img src="Pictures/MouseKeyboard.png" alt="" />
+                        </div>
+                        <div id="imgControlsContainer" style="display: none;" onclick="hideControls()">
+                            <img src="./Pictures/KeyboardKeysInstruction.png" alt="" id="imgControls">
+                        </div>
                 </div>
             </div>
-        </div>
 
-        </html>
+            </html>
 
-        <script src="./index.js"></script>
+            <script src="./index.js"></script>
 
-        <style>
-            /* =========================================
+            <style>
+                /* =========================================
        1. GLOBAL & UTILITIES
        ========================================= */
-            html {
-                background-color: rgba(0, 0, 0, 0.9);
-                overflow-x: hidden;
-                color: white;
-                scrollbar-gutter: stable;
-            }
+                html {
+                    background-color: rgba(0, 0, 0, 0.9);
+                    overflow-x: hidden;
+                    color: white;
+                    scrollbar-gutter: stable;
+                }
 
-            button {
-                background-color: black;
-                cursor: pointer;
-                color: white;
-            }
+                button {
+                    background-color: black;
+                    cursor: pointer;
+                    color: white;
+                }
 
-            .hidden {
-                display: none !important;
-            }
+                .hidden {
+                    display: none !important;
+                }
 
-            .highlight {
-                border: 5px solid white;
-                margin: -5px 5px !important;
-                background-color: white;
-                border-radius: 10px;
-            }
+                .highlight {
+                    border: 5px solid white;
+                    margin: -5px 5px !important;
+                    background-color: white;
+                    border-radius: 10px;
+                }
 
-            .highlightMini {
-                margin: -5px;
-                border: 5px solid white;
-                border-radius: 5px;
-            }
+                .highlightMini {
+                    margin: -5px;
+                    border: 5px solid white;
+                    border-radius: 5px;
+                }
 
 
-            /* #loadedCardWrapper>div {
+                /* #loadedCardWrapper>div {
                 padding: 10px 5px;
                 margin: 0 -5px;
             } */
 
-            .selected {
-                background-color: rgb(34, 182, 145) !important;
-                border: 1px dashed white;
-                margin-right: -6px !important;
-                margin-left: -6px !important;
-                margin-top: -1px !important;
-                margin-bottom: -1px !important;
-                border-radius: 10px;
-            }
+                .selected {
+                    background-color: rgb(34, 182, 145) !important;
+                    border: 1px dashed white;
+                    margin-right: -6px !important;
+                    margin-left: -6px !important;
+                    margin-top: -1px !important;
+                    margin-bottom: -1px !important;
+                    border-radius: 10px;
+                }
 
-            .hoverZoom:hover {
-                transform: scale(1.25);
-            }
+                .hoverZoom:hover {
+                    transform: scale(1.25);
+                }
 
-            .rotated {
-                transform: rotate(180deg);
-            }
+                .rotated {
+                    transform: rotate(180deg);
+                }
 
-            .rotated:hover {
-                transform: scale(1.25) rotate(180deg);
-            }
+                .rotated:hover {
+                    transform: scale(1.25) rotate(180deg);
+                }
 
-            .moveLeft {
-                transform: translate(-16vw, 0);
-            }
+                .moveLeft {
+                    transform: translate(-16vw, 0);
+                }
 
-            .moveRight {
-                transform: translate(16vw, 0);
-            }
+                .moveRight {
+                    transform: translate(16vw, 0);
+                }
 
-            /* =========================================
+                /* =========================================
        2. WHOLE PAGE (MENU & DECK BUILDER)
        ========================================= */
 
-            /* Logo */
-            #logoImage img {
-                width: 30vw;
-                position: fixed;
-                left: 35vw;
-                bottom: 50px;
-                z-index: -1;
-                display: none;
-            }
+                /* Logo */
+                #logoImage img {
+                    width: 30vw;
+                    position: fixed;
+                    left: 35vw;
+                    bottom: 50px;
+                    z-index: -1;
+                    display: none;
+                }
 
-            #logoImageMini img {
-                width: 14vw;
-                position: fixed;
-                right: 2vw;
+                #logoImageMini img {
+                    width: 14vw;
+                    position: fixed;
+                    right: 2vw;
+                    top: 2vh;
+                    z-index: -1;
+                }
+
+                #howToPlayLink {
+                    position: absolute;
+                    top: 120px;
+                    width: 50px;
+                    height: 50px;
+                    left: 0;
+                    margin: 10px 0 0 10px;
+                    /* background-color: rgba(0, 0, 0, 0.75); */
+                    /* padding: 5px; */
+                    /* border-radius: 50%; */
+                    transition: transform 0.25s ease, color 0.25s ease, font-weight 0.25s ease;
+                    font-weight: bolder;
+                    color: white;
+                    text-decoration: none;
+                }
+
+
+                #howToPlayLink:hover {
+                    transform: scale(1.25);
+                    color: rgb(34, 182, 145);
+                    cursor: pointer;
+                    font-weight: bolder;
+
+                }
+
+                #howToPlayLink:hover #howToPlayLinkHelper {
+                    color: rgb(34, 182, 145);
+                    transform: scale(1);
+                    left: 55px;
+                }
+
+
+                #howToPlayLinkTxt {
+                    /* position: absolute;
                 top: 2vh;
-                z-index: -1;
-            }
+                width: 7vw;
+                left: 46.5vw;
+                background-color: rgba(0, 0, 0, 0.75);
+                padding: 5px;
+                border-radius: 5px; */
+                    transition: transform 0.25s ease, color 0.25s ease, font-weight 0.25s ease;
+                    font-weight: normal;
+                    color: white;
+                    background-color: black;
+                    font-size: 32px;
+                    text-align: center;
+                    z-index: 100;
+                    height: 50px;
+                    border-radius: 50%;
+                    will-change: transform;
+                    backface-visibility: hidden;
+                }
 
-            #divDiscordLink {
-                /* display: flex;
+                #howToPlayLinkTxt:hover {
+                    color: rgb(34, 182, 145);
+                    cursor: pointer;
+                    font-weight: bolder;
+                }
+
+                #howToPlayLinkHelper {
+                    color: grey;
+                    /* margin-left: -250px; */
+                    font-weight: bold;
+                    position: absolute;
+                    transition: transform 0.2s ease, left 0.2s ease, color 0.5s ease;
+                    transform: scale(.1);
+                    left: -120px;
+                    font-size: 20px;
+                    width: 300px;
+                    z-index: -100;
+                    top: 10px;
+                    /* top: 100px; */
+                }
+
+
+                #divDiscordLink {
+                    /* display: flex;
                 flex-wrap: wrap; */
-                position: absolute;
-                top: 0;
-                left: 0;
-                /* width: 250px;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    /* width: 250px;
                 height: 120px; */
-                align-items: center;
-            }
+                    align-items: center;
+                }
 
-            .imgDiscordLink1 {
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
+                .imgDiscordLink1 {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
 
-            .imgDiscordLink2 {
-                position: absolute;
-                top: 60px;
-                left: 0;
-            }
+                .imgDiscordLink2 {
+                    position: absolute;
+                    top: 60px;
+                    left: 0;
+                }
 
-            .imgDiscordLink {
-                height: 50px;
-                margin-top: 10px;
-                margin-left: 10px;
-                transition: transform 0.25s ease;
-            }
+                .imgDiscordLink {
+                    height: 50px;
+                    margin-top: 10px;
+                    margin-left: 10px;
+                    transition: transform 0.25s ease;
+                }
 
-            .imgDiscordLink:hover {
-                transform: scale(1.25);
-            }
+                .imgDiscordLink:hover {
+                    transform: scale(1.25);
+                }
 
-            .aDiscordLink:hover+.joinThe.discord {
+                /* .aDiscordLink:hover+.joinThe.discord {
                 color: rgb(34, 182, 145);
                 transform: scale(1);
                 left: 75px;
@@ -237,644 +318,679 @@
                 color: rgb(34, 182, 145);
                 transform: scale(1);
                 left: 75px;
-            }
+            } */
 
-            .joinThe {
-                color: grey;
-                /* margin-left: -250px; */
-                font-weight: bold;
-                position: absolute;
-                transition: transform 0.2s ease, left 0.2s ease, color 0.5s ease;
-                transform: scale(.1);
-                left: -100px;
-                font-size: 20px;
-                width: 300px;
-                z-index: -100;
-            }
+                .aDiscordLink:hover+.joinThe {
+                    color: rgb(34, 182, 145);
+                    transform: scale(1);
+                    left: 75px;
+                }
 
-            button {
-                font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-            }
+                .joinThe {
+                    color: grey;
+                    /* margin-left: -250px; */
+                    font-weight: bold;
+                    position: absolute;
+                    transition: transform 0.2s ease, left 0.2s ease, color 0.5s ease;
+                    transform: scale(.1);
+                    left: -100px;
+                    font-size: 20px;
+                    width: 300px;
+                    z-index: -100;
+                }
 
-            .kickstarter {
-                top: 80px;
-            }
+                button {
+                    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+                }
 
-            .discord {
-                top: 20px;
-            }
+                .kickstarter {
+                    top: 80px;
+                }
 
-            /* Main Menu Buttons */
-            #mainButtons {
-                position: absolute;
-                top: 10vh;
-                height: 10vh;
-                width: 22vw;
-                left: 20vw;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                z-index: 100;
-            }
+                .discord {
+                    top: 20px;
+                }
 
-            /* #mainButtons:has(#saveStack) {
+                /* Main Menu Buttons */
+                #mainButtons {
+                    position: absolute;
+                    top: 10vh;
+                    height: 10vh;
+                    width: 22vw;
+                    left: 20vw;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    z-index: 100;
+                }
+
+                /* #mainButtons:has(#saveStack) {
         position: fixed;
     } */
 
-            .mainButton {
-                /* width: 500px; */
-                font-size: 72px;
-                /* margin-bottom: 20px; */
-                transition: transform 0.25s ease;
+                .mainButton {
+                    /* width: 500px; */
+                    font-size: 72px;
+                    /* margin-bottom: 20px; */
+                    transition: transform 0.25s ease;
 
-            }
+                }
 
-            .mainButton:hover {
-                transform: scale(1.25);
-            }
+                .mainButton:hover {
+                    transform: scale(1.25);
+                }
 
-            /* #saveStack {
+                /* #saveStack {
         background-color: rgb(34, 182, 145);
         color: black;
     } */
 
-            @keyframes phaseInEffect {
-                0% {
-                    opacity: 0;
-                    transform: scale(0.9);
-                    /* Starts slightly smaller */
-                    filter: blur(10px);
-                    /* Starts blurry */
+                @keyframes phaseInEffect {
+                    0% {
+                        opacity: 0;
+                        transform: scale(0.9);
+                        /* Starts slightly smaller */
+                        filter: blur(10px);
+                        /* Starts blurry */
+                    }
+
+                    100% {
+                        opacity: 1;
+                        transform: scale(1);
+                        /* Normal size */
+                        filter: blur(0px);
+                        /* Sharp */
+                    }
                 }
 
-                100% {
-                    opacity: 1;
-                    transform: scale(1);
-                    /* Normal size */
-                    filter: blur(0px);
-                    /* Sharp */
+                #saveStack {
+                    /* Your existing styles */
+                    background-color: rgb(34, 182, 145);
+                    color: black;
+
+                    font-weight: bolder;
+
+                    /* REQUIRED for the effect: */
+                    position: fixed;
+                    /* Establishes a container for the absolute shimmer */
+                    overflow: hidden;
+                    /* Hides the shimmer when it moves outside the box */
+
+                    /* Optional: Makes it look like a button */
+                    padding: 10px 20px;
+                    border: none;
+                    cursor: pointer;
+                    animation: phaseInEffect 0.5s ease-out forwards;
                 }
-            }
 
-            #saveStack {
-                /* Your existing styles */
-                background-color: rgb(34, 182, 145);
-                color: black;
-
-                font-weight: bolder;
-
-                /* REQUIRED for the effect: */
-                position: fixed;
-                /* Establishes a container for the absolute shimmer */
-                overflow: hidden;
-                /* Hides the shimmer when it moves outside the box */
-
-                /* Optional: Makes it look like a button */
-                padding: 10px 20px;
-                border: none;
-                cursor: pointer;
-                animation: phaseInEffect 0.5s ease-out forwards;
-            }
-
-            /* This creates the 'ghost' element that acts as the white line */
-            #saveStack::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: -150%;
-                /* Start off-screen to the left */
-                width: 100%;
-                /* Width of the shine beam */
-                height: 100%;
-
-                /* The "White Slashed Line" */
-                /* 120deg tilts it. The middle color is the white line. */
-                background: linear-gradient(120deg,
-                        transparent 20%,
-                        rgba(255, 255, 255, 0.6) 50%,
-                        transparent 80%);
-
-                /* The Movement */
-                animation: shine 2.5s infinite linear;
-                /* Runs every 3 seconds */
-            }
-
-            /* The Animation Logic */
-            @keyframes shine {
-                0% {
+                /* This creates the 'ghost' element that acts as the white line */
+                #saveStack::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
                     left: -150%;
-                    /* Start */
+                    /* Start off-screen to the left */
+                    width: 100%;
+                    /* Width of the shine beam */
+                    height: 100%;
+
+                    /* The "White Slashed Line" */
+                    /* 120deg tilts it. The middle color is the white line. */
+                    background: linear-gradient(120deg,
+                            transparent 20%,
+                            rgba(255, 255, 255, 0.6) 50%,
+                            transparent 80%);
+
+                    /* The Movement */
+                    animation: shine 2.5s infinite linear;
+                    /* Runs every 3 seconds */
                 }
 
-                50% {
-                    left: 150%;
-                    /* End (middle of animation to allow a pause) */
+                /* The Animation Logic */
+                @keyframes shine {
+                    0% {
+                        left: -150%;
+                        /* Start */
+                    }
+
+                    50% {
+                        left: 150%;
+                        /* End (middle of animation to allow a pause) */
+                    }
+
+                    100% {
+                        left: 150%;
+                        /* Stay invisible for the second half (pause) */
+                    }
                 }
 
-                100% {
-                    left: 150%;
-                    /* Stay invisible for the second half (pause) */
+                /* Play Button Area */
+                #playButtonDiv {
+                    position: absolute;
+                    top: 10vh;
+                    width: 20vw;
+                    right: 20vw;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
                 }
-            }
 
-            /* Play Button Area */
-            #playButtonDiv {
-                position: absolute;
-                top: 10vh;
-                width: 20vw;
-                right: 20vw;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-            }
+                #playButton {
+                    /* 1. LAYOUT */
+                    width: 200px;
+                    font-size: 72px;
+                    position: absolute;
+                    border-radius: 5px;
 
-            #playButton {
-                /* 1. LAYOUT */
-                width: 200px;
-                font-size: 72px;
-                position: absolute;
-                border-radius: 5px;
+                    /* 2. THE FILL SYSTEM */
+                    /* The "Empty" color underneath */
+                    background-color: grey;
 
-                /* 2. THE FILL SYSTEM */
-                /* The "Empty" color underneath */
-                background-color: grey;
+                    /* The "Full" color (Green) essentially painted as an image on top */
+                    /* We use linear-gradient simply to create a solid block of color */
+                    background-image: linear-gradient(rgb(34, 182, 145), rgb(34, 182, 145));
 
-                /* The "Full" color (Green) essentially painted as an image on top */
-                /* We use linear-gradient simply to create a solid block of color */
-                background-image: linear-gradient(rgb(34, 182, 145), rgb(34, 182, 145));
+                    /* Stop the green from repeating so we can control its size */
+                    background-repeat: no-repeat;
 
-                /* Stop the green from repeating so we can control its size */
-                background-repeat: no-repeat;
+                    /* 3. ANIMATION SETTINGS */
+                    /* We animate background-size (the fill) and transform (the hover scale) */
+                    transition: background-size 0.25s ease, transform 0.25s ease;
+                    /* transform: scale(0.9); */
+                }
 
-                /* 3. ANIMATION SETTINGS */
-                /* We animate background-size (the fill) and transform (the hover scale) */
-                transition: background-size 0.25s ease, transform 0.25s ease;
-                /* transform: scale(0.9); */
-            }
+                /* STATE 1: NOT READY (0% Filled) */
+                .playButtonNotReady {
+                    /* Width is 0, Height is 100% */
+                    background-size: 0% 100%;
+                    color: white;
+                    cursor: auto;
+                    transform: scale(0.8) !important;
+                }
 
-            /* STATE 1: NOT READY (0% Filled) */
-            .playButtonNotReady {
-                /* Width is 0, Height is 100% */
-                background-size: 0% 100%;
-                color: white;
-                cursor: auto;
-                transform: scale(0.8) !important;
-            }
+                /* STATE 2: HALF READY (50% Filled) */
+                .playButtonHalfReady {
+                    /* Width is 50% */
+                    background-size: 50% 100%;
+                    color: white;
+                    /* User requested change to black text here */
+                    cursor: auto;
+                    transform: scale(0.9) !important;
+                }
 
-            /* STATE 2: HALF READY (50% Filled) */
-            .playButtonHalfReady {
-                /* Width is 50% */
-                background-size: 50% 100%;
-                color: white;
-                /* User requested change to black text here */
-                cursor: auto;
-                transform: scale(0.9) !important;
-            }
+                /* STATE 3: READY (100% Filled) */
+                .playButtonReady {
+                    /* Width is 100% */
+                    background-size: 100% 100%;
+                    color: black;
+                    font-weight: bolder;
+                    cursor: pointer;
+                    transform: scale(1);
+                    position: relative;
+                    overflow: hidden;
+                }
 
-            /* STATE 3: READY (100% Filled) */
-            .playButtonReady {
-                /* Width is 100% */
-                background-size: 100% 100%;
-                color: black;
-                font-weight: bolder;
-                cursor: pointer;
-                transform: scale(1);
-                position: relative;
-                overflow: hidden;
-            }
+                .playButtonReady::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: -150%;
+                    /* Start off-screen to the left */
+                    width: 100%;
+                    /* Width of the shine beam */
+                    height: 100%;
 
-            .playButtonReady::after {
-                content: "";
-                position: absolute;
-                top: 0;
-                left: -150%;
-                /* Start off-screen to the left */
-                width: 100%;
-                /* Width of the shine beam */
-                height: 100%;
+                    /* The "White Slashed Line" */
+                    /* 120deg tilts it. The middle color is the white line. */
+                    background: linear-gradient(120deg,
+                            transparent 20%,
+                            rgba(255, 255, 255, 0.6) 50%,
+                            transparent 80%);
 
-                /* The "White Slashed Line" */
-                /* 120deg tilts it. The middle color is the white line. */
-                background: linear-gradient(120deg,
-                        transparent 20%,
-                        rgba(255, 255, 255, 0.6) 50%,
-                        transparent 80%);
+                    /* The Movement */
+                    animation: shine 2.5s infinite linear;
+                    /* Runs every 3 seconds */
+                }
 
-                /* The Movement */
-                animation: shine 2.5s infinite linear;
-                /* Runs every 3 seconds */
-            }
+                /* HOVER EFFECTS */
+                /* We keep these separate to ensure they don't conflict with the fill state */
+                .playButtonNotReady:hover {
+                    transform: scale(0.8) !important;
+                }
 
-            /* HOVER EFFECTS */
-            /* We keep these separate to ensure they don't conflict with the fill state */
-            .playButtonNotReady:hover {
-                transform: scale(0.8) !important;
-            }
+                .playButtonHalfReady:hover {
+                    transform: scale(0.9) !important;
+                }
 
-            .playButtonHalfReady:hover {
-                transform: scale(0.9) !important;
-            }
+                .playButtonReady:hover {
+                    transform: scale(1.75);
+                }
 
-            .playButtonReady:hover {
-                transform: scale(1.75);
-            }
+                #playButton:hover {
+                    transform: scale(1.25);
+                }
 
-            #playButton:hover {
-                transform: scale(1.25);
-            }
+                /* Loaded Deck Display */
+                #loadedDeckTitle {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    font-weight: bold;
+                    font-size: 24px;
+                    background-color: black;
+                    transition: transform 0.25s ease-out, background-color 0.25s ease-out, color 0.25s ease-out, padding-top 0.25s ease-out, padding-bottom 0.25s ease-out, padding-top 0.25s ease-out, margin-bottom 0.25s ease-out;
+                    transform: scale(1);
+                    height: 100%;
+                    width: 100%;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+                    margin-bottom: -20px;
+                }
 
-            /* Loaded Deck Display */
-            #loadedDeckTitle {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                font-weight: bold;
-                font-size: 24px;
-                background-color: black;
-                transition-property: background-color, transform, color;
-                transition-duration: 0.25s;
-            }
+                #loadedDeckTitle:hover {
+                    transform: scale(1.25);
+                    background-color: rgb(34, 182, 145);
+                    color: black;
+                    /* font-weight: bolder; */
+                    cursor: pointer;
+                    padding-top: 5px;
+                    padding-bottom: 5px;
+                    margin-bottom: -10px;
+                }
 
-            #loadedDeckTitle:hover {
-                transform: scale(1.25);
-                background-color: rgb(34, 182, 145);
-                color: black;
-                /* font-weight: bolder; */
-                cursor: pointer;
-            }
-
-            /* =========================================
+                /* =========================================
    LOADED CARD DISPLAY
    (Replaces the entire block you sent)
    ========================================= */
 
-            /* 1. THE WINDOW (Base State) */
-            #loadedCardDisplay {
-                /* POSITIONING: Fixed allows smooth movement relative to the screen */
-                position: absolute;
-                top: 25vh;
-                /* Start position */
-                left: 50%;
-                /* Move to horizontal middle */
-                transform: translateX(-50%);
-                /* Perfectly center it */
-                z-index: 100;
-                /* Ensure it sits on top of other content */
+                /* 1. THE WINDOW (Base State) */
+                #loadedCardDisplay {
+                    /* POSITIONING: Fixed allows smooth movement relative to the screen */
+                    position: absolute;
+                    top: max(180px, 25vh);
+                    /* Start position */
+                    left: 50%;
+                    /* Move to horizontal middle */
+                    transform: translateX(-50%);
+                    /* Perfectly center it */
+                    z-index: 100;
+                    /* Ensure it sits on top of other content */
 
-                /* SIZING & STYLE */
-                width: 98vw;
-                /* Full width (minus margins) */
-                height: auto;
-                /* Allow it to grow naturally */
-                /* max-height: 80vh; */
-                overflow: hidden;
-                /* CRITICAL: Clips content smoothly during animation */
+                    /* SIZING & STYLE */
+                    width: 98vw;
+                    /* Full width (minus margins) */
+                    height: auto;
+                    /* Allow it to grow naturally */
+                    /* max-height: 80vh; */
+                    overflow: hidden;
+                    /* CRITICAL: Clips content smoothly during animation */
 
-                /* ANIMATION CONFIGURATION */
-                transition: all 0.25s ease-in-out;
-            }
+                    /* ANIMATION CONFIGURATION */
+                    transition: all 0.25s ease-in-out;
+                }
 
-            /* 2. MINIMIZED STATE */
-            #loadedCardDisplay.minimized {
-                /* New Position */
-                top: 1vh;
+                /* 2. MINIMIZED STATE */
+                #loadedCardDisplay.minimized {
+                    /* New Position */
+                    top: -20px;
 
-                /* New Size (Constraints) */
-                width: 192px;
-                height: 10vh;
-                /* Force a fixed height so it shrinks smoothly */
-                border-radius: 10px;
+                    /* New Size (Constraints) */
+                    width: 192px;
+                    height: 40px;
+                    /* Force a fixed height so it shrinks smoothly */
+                    border-radius: 10px;
+                    padding-top: 20px;
+                    background-color: black;
 
-                /* Note: We do NOT set position: static here. It stays fixed. */
-            }
+                    /* Note: We do NOT set position: static here. It stays fixed. */
+                }
 
-            /* 3. CHILD ELEMENT STYLING */
-            #loadedCardDisplay>* {
-                /* Keep your original look */
-                background-color: black;
-                padding: 10px;
-                margin-top: 10px;
-                margin-bottom: 10px;
-                border-radius: 10px;
+                #loadedCardDisplay.minimized:hover {
+                    background-color: rgb(34, 182, 145);
+                    cursor: pointer;
+                }
 
-                /* Setup for smooth hiding */
-                transition: opacity 0.2s ease-in-out;
-                opacity: 1;
-            }
+                /* 3. CHILD ELEMENT STYLING */
+                #loadedCardDisplay>*:not(:first-child) {
+                    /* Keep your original look */
+                    background-color: black;
+                    padding: 10px;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    border-radius: 10px;
 
-            /* 4. SMOOTH HIDING LOGIC */
-            /* We use opacity + overflow:hidden (on parent) instead of display:none */
-            #loadedCardDisplay.minimized>*:not(:first-child) {
-                opacity: 0;
-                pointer-events: none;
-                /* Prevents clicking invisible items */
-            }
+                    /* Setup for smooth hiding */
+                    transition: opacity 0.2s ease-in-out;
+                    opacity: 1;
+                }
 
-            /* 5. INNER CONTENT WRAPPERS (Kept mostly original) */
-            #loadedCardWrapper {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                align-items: center;
-                width: 100%;
-                padding-bottom: 20px;
-            }
+                /* 4. SMOOTH HIDING LOGIC */
+                /* We use opacity + overflow:hidden (on parent) instead of display:none */
+                #loadedCardDisplay.minimized>*:not(:first-child) {
+                    opacity: 0;
+                    pointer-events: none;
+                    /* Prevents clicking invisible items */
+                }
 
-            #loadedCardWrapper>div {
-                padding: 10px 5px;
-                margin: 0 -5px;
-            }
+                /* 5. INNER CONTENT WRAPPERS (Kept mostly original) */
+                #loadedCardWrapper {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    align-items: center;
+                    width: 100%;
+                    padding-bottom: 20px;
+                }
 
-            #loadedCardDisplay button {
-                height: 50px;
-                width: auto;
-            }
+                #loadedCardWrapper>div {
+                    padding: 10px 5px;
+                    margin: 0 -5px;
+                }
 
-            .loadedCard {
-                width: 8vw;
-            }
+                #loadedCardDisplay button {
+                    height: 50px;
+                    width: auto;
+                }
+
+                .loadedCard {
+                    width: 8vw;
+                }
 
 
-            /* Main Card Selection Display */
-            #mainCardDisplayContainer {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                width: 100%;
-                margin-top: 30vh;
-                margin-bottom: 50vh;
-                z-index: -1;
-            }
+                /* Main Card Selection Display */
+                #mainCardDisplayContainer {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    width: 100%;
+                    margin-top: 30vh;
+                    margin-bottom: 50vh;
+                    z-index: -1;
+                }
 
-            #mainCardDisplayContainer>div {
-                width: 20%
-            }
+                #mainCardDisplayContainer>div {
+                    width: 20%
+                }
 
-            #mainCardDisplayContainer * * {
-                width: 50%;
-                cursor: pointer;
-            }
+                #mainCardDisplayContainer * * {
+                    width: 50%;
+                    cursor: pointer;
+                }
 
-            #deckBuilderText {
-                display: flex;
-                width: 100vw;
-                justify-content: space-around;
-                position: absolute;
-                top: 27vh;
-                color: rgb(34, 182, 145);
-            }
+                #deckBuilderText {
+                    display: flex;
+                    width: 100vw;
+                    justify-content: space-around;
+                    position: absolute;
+                    top: 27vh;
+                    color: rgb(34, 182, 145);
+                }
 
-            #heroDisplay {
-                display: flex;
-                flex-wrap: wrap;
-            }
+                #heroDisplay {
+                    display: flex;
+                    flex-wrap: wrap;
+                }
 
-            /* Current Deck Bottom Bar */
-            #currentDeckDisplay {
-                position: fixed;
-                display: flex;
-                flex-wrap: wrap;
-                bottom: 0;
-                left: 95vw;
-                width: 100%;
-                background-color: rgba(0, 0, 0, 0.75);
-                color: white;
-                padding: 15px 0 15px 20px;
-                height: 24vh;
-                flex-wrap: wrap;
-                margin-left: 5vw;
-                transition: left 0.5s ease-out;
-                box-shadow: 12px -12px 30px rgba(0, 0, 0, 0.5);
-            }
+                /* Current Deck Bottom Bar */
+                #currentDeckDisplay {
+                    position: fixed;
+                    display: flex;
+                    flex-wrap: wrap;
+                    bottom: 0;
+                    left: 95vw;
+                    width: 100%;
+                    background-color: rgba(0, 0, 0, 0.75);
+                    color: white;
+                    padding: 15px 0 15px 20px;
+                    height: 24vh;
+                    flex-wrap: wrap;
+                    margin-left: 5vw;
+                    transition: left 0.5s ease-out;
+                    box-shadow: 12px -12px 30px rgba(0, 0, 0, 0.5);
+                }
 
-            /* #currentDeckDisplay {
+                /* #currentDeckDisplay {
                 display: none;
             } */
 
-            #currentDeckDisplay.show {
-                left: 0vh;
-            }
+                #currentDeckDisplay.show {
+                    left: 0vh;
+                }
 
-            #currentDeckDisplay.minimized {
-                left: 91.5vw;
-                /* display: none; */
-            }
+                #currentDeckDisplay.minimized {
+                    left: 91.5vw;
+                    /* display: none; */
+                }
 
-            #currentDeckDisplay>* {
-                height: 25vh;
-                cursor: pointer;
-            }
+                #currentDeckDisplay>* {
+                    height: 25vh;
+                    cursor: pointer;
+                }
 
-            .validated {
-                color: rgb(34, 182, 145) !important;
-            }
+                .validated {
+                    color: rgb(34, 182, 145) !important;
+                }
 
-            .greyedOut {
-                opacity: 0.3;
-                pointer-events: none;
-            }
+                .greyedOut {
+                    opacity: 0.3;
+                    pointer-events: none;
+                }
 
-            #counterHelper {
-                width: 50px;
-                display: flex;
-                flex-wrap: wrap;
-                margin-left: -10px;
-            }
+                #counterHelper {
+                    width: 50px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-left: -10px;
+                }
 
-            #deckDisplayButtonDiv {
-                width: 50px;
-                height: 25vh;
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around
-                    /* margin-left: -0.8vw;
+                #deckDisplayButtonDiv {
+                    width: 50px;
+                    height: 25vh;
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around
+                        /* margin-left: -0.8vw;
         margin-top: -1vh;
         margin-right: 0.5vw; */
-            }
+                }
 
-            #deckDisplayButton {
-                height: 25px;
-                width: 50px;
-                margin-top: -10px;
-                margin-left: -10px;
-            }
+                #deckDisplayButton {
+                    height: 25px;
+                    width: 50px;
+                    margin-top: -10px;
+                    margin-left: -10px;
+                }
 
-            #cardCounter {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                width: 50px;
-                height: 22vh;
-                margin-left: -10px;
-            }
+                #cardCounter {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    width: 50px;
+                    height: 22vh;
+                    margin-left: -10px;
+                }
 
-            /* Legacy Game Button Div (Commented out in HTML) */
-            .gameButtonDiv {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: space-around;
-                align-items: center;
-                margin-top: 50px;
-            }
+                /* Legacy Game Button Div (Commented out in HTML) */
+                .gameButtonDiv {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-around;
+                    align-items: center;
+                    margin-top: 50px;
+                }
 
-            /* =========================================
+                /* =========================================
        3. GAME SCREEN
        ========================================= */
 
-            /* Mini Map */
-            #miniMapBox {
-                position: absolute;
-                top: -3vh;
-                width: 100%;
-                left: -1vw;
-                font-size: 18vh;
-                z-index: 5;
-                font-weight: bolder;
-            }
+                #goBackText {
+                    transition: transform 0.25s ease, color 0.25s ease;
+                    color: white;
+                    position: absolute;
+                    top: 10px;
+                    left: 10px;
+                }
 
-            #gameMiniMap {
-                /* margin-bottom: 20vh; */
-                width: 100%;
-            }
+                #goBackText:hover {
+                    color: rgb(34, 182, 145);
+                    transform: scale(1.25);
+                    cursor: pointer;
+                }
 
-            #gameMiniMap>#gameBoardmini {
-                /* width: 100vw; */
-                display: flex;
-                flex-wrap: nowrap;
-                justify-content: space-around;
-                top: 4vh;
-                padding: 0;
-                margin-top: 2vh;
-                width: 99%;
-            }
+                /* Mini Map */
+                #miniMapBox {
+                    position: absolute;
+                    top: -3vh;
+                    width: 100%;
+                    left: -1vw;
+                    font-size: 18vh;
+                    z-index: 5;
+                    font-weight: bolder;
+                }
 
-            #playMat {
-                height: 24vh;
-                margin-top: 20vh;
-                background-image: url("./Pictures/HANDLogoBlackandWhite.png");
-                background-repeat: repeat;
-                background-size: contain;
-            }
+                #gameMiniMap {
+                    /* margin-bottom: 20vh; */
+                    width: 100%;
+                }
 
-            #gameBoardmini {
-                display: flex;
-                flex-wrap: nowrap;
-                padding: 0 100px;
-                position: absolute;
-                bottom: 12vh;
-            }
+                #gameMiniMap>#gameBoardmini {
+                    /* width: 100vw; */
+                    display: flex;
+                    flex-wrap: nowrap;
+                    justify-content: space-around;
+                    top: 4vh;
+                    padding: 0;
+                    margin-top: 2vh;
+                    width: 99%;
+                }
 
-            #gameBoardmini * {
-                width: 4vw;
-                height: 5.6vw;
-            }
+                #playMat {
+                    height: 24vh;
+                    margin-top: 20vh;
+                    background-image: url("./Pictures/HANDLogoBlackandWhite.png");
+                    background-repeat: repeat;
+                    background-size: contain;
+                }
 
-            /* Main Game Board */
-            #gameBoard {
-                display: flex;
-                flex-wrap: nowrap;
-                padding: 0 100px;
-                position: absolute;
-                bottom: 12vh;
-            }
+                #gameBoardmini {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    padding: 0 100px;
+                    position: absolute;
+                    bottom: 12vh;
+                }
 
-            #gameBoard>div {
-                transition: transform 0.25s ease-out;
-            }
+                #gameBoardmini * {
+                    width: 4vw;
+                    height: 5.6vw;
+                }
 
-            #gameBoard>div>img {
-                width: 15vw;
-                margin: 0 10px;
-                /* margin-right: -10vw; */
-                transition: transform 0.5s ease;
-            }
+                /* Main Game Board */
+                #gameBoard {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    padding: 0 100px;
+                    position: absolute;
+                    bottom: 12vh;
+                }
 
-            /* Game Card Buttons (JS Generated) */
-            .gameCardButtons {
-                display: flex;
-                justify-content: space-around;
-                height: 0px;
-                position: relative;
-                top: -100px;
-            }
+                #gameBoard>div {
+                    transition: transform 0.25s ease-out;
+                }
 
-            .gameCardButtons button {
-                height: 36px;
-                font-size: 24px;
-            }
+                #gameBoard>div>img {
+                    width: 15vw;
+                    margin: 0 10px;
+                    /* margin-right: -10vw; */
+                    transition: transform 0.5s ease;
+                }
 
-            .gameCardButtons button:hover {
-                transform: scale(1.5);
-            }
+                /* Game Card Buttons (JS Generated) */
+                .gameCardButtons {
+                    display: flex;
+                    justify-content: space-around;
+                    height: 0px;
+                    position: relative;
+                    top: -100px;
+                }
 
-            /* Navigation Arrows */
-            #moveArrows {
-                position: absolute;
-                display: flex;
-                flex-wrap: wrap;
-                width: 100%;
-                justify-content: space-between;
-                bottom: 12vh;
-                left: 0;
-                pointer-events: none;
-            }
+                .gameCardButtons button {
+                    height: 36px;
+                    font-size: 24px;
+                }
 
-            #moveArrows div img {
-                width: 8vh;
-                padding: 17.155vh 5px 17.155vh 10px;
-                pointer-events: all;
-            }
+                .gameCardButtons button:hover {
+                    transform: scale(1.5);
+                }
 
-            #moveArrows div img:hover {
-                background-color: rgba(255, 255, 255, 0.5);
-                cursor: pointer;
-            }
+                /* Navigation Arrows */
+                #moveArrows {
+                    position: absolute;
+                    display: flex;
+                    flex-wrap: wrap;
+                    width: 100%;
+                    justify-content: space-between;
+                    bottom: 12vh;
+                    left: 0;
+                    pointer-events: none;
+                }
 
-            #keyboardControls {
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                z-index: -10;
-                margin-bottom: 0;
-                margin-left: 0;
-                transition: transform 0.25s ease, margin-bottom 0.25s ease, margin-left 0.25s ease;
-            }
+                #moveArrows div img {
+                    width: 8vh;
+                    padding: 17.155vh 5px 17.155vh 10px;
+                    pointer-events: all;
+                }
 
-            #keyboardControls>img {
-                height: 6vh;
-            }
+                #moveArrows div img:hover {
+                    background-color: rgba(255, 255, 255, 0.5);
+                    cursor: pointer;
+                }
 
-            #keyboardControls:hover {
-                transform: scale(1.25);
-                margin-bottom: 1vh;
-                margin-left: 1vw;
-                cursor: pointer;
-            }
+                #keyboardControls {
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    z-index: -10;
+                    margin-bottom: 0;
+                    margin-left: 0;
+                    transition: transform 0.25s ease, margin-bottom 0.25s ease, margin-left 0.25s ease;
+                }
 
-            #imgControlsContainer {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.5);
-                display: flex;
-                justify-content: center;
-                align-content: center;
-                z-index: 1000;
-            }
+                #keyboardControls>img {
+                    height: 6vh;
+                }
 
-            #imgControls {
-                height: 50vh;
-                padding: 20px;
-                margin-top: 10vh;
-                background-color: rgba(255, 255, 255, 0.85);
-                border: 2px solid white;
-                border-radius: 5px;
-            }
+                #keyboardControls:hover {
+                    transform: scale(1.25);
+                    margin-bottom: 1vh;
+                    margin-left: 1vw;
+                    cursor: pointer;
+                }
 
-            /* ---------- MOBILE FRIENDLY ---------- */
-            /* 
+                #imgControlsContainer {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    display: flex;
+                    justify-content: center;
+                    align-content: center;
+                    z-index: 1000;
+                }
+
+                #imgControls {
+                    height: 50vh;
+                    padding: 20px;
+                    margin-top: 10vh;
+                    background-color: rgba(255, 255, 255, 0.85);
+                    border: 2px solid white;
+                    border-radius: 5px;
+                }
+
+                /* ---------- MOBILE FRIENDLY ---------- */
+                /* 
             @media (max-width: 768px) {
 
                 .hoverZoom:hover,
@@ -952,4 +1068,4 @@
                 }
 
             } */
-        </style>
+            </style>
